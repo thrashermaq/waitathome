@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waitathome/ui/screen/customer/customer_screen.dart';
+import 'package:waitathome/ui/screen/customer/map_screen.dart';
 import 'package:waitathome/ui/screen/shop/shop_login.dart';
 
 class IntroScreen extends StatelessWidget {
@@ -68,7 +68,7 @@ class IntroScreen extends StatelessWidget {
                   textColor: Colors.white,
                   padding: EdgeInsets.all(8.0),
                   onPressed: () {
-                    Navigator.pushNamed(context, CustomerScreen.routeName);
+                    Navigator.pushNamed(context, MapScreen.routeName);
                   },
                   child: Row(
                     children: <Widget>[
