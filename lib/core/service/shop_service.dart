@@ -19,17 +19,10 @@ class ShopService {
     }).onError((e) => print(e));
   }
 
-  void addCustomer(String shopId) {
-    changeCustomerBy(1, shopId);
-  }
-
-  void removeCustomer(String shopId) {
-    changeCustomerBy(-1, shopId);
-  }
-
-  void changeCustomerBy(int amount, String shopId) {
-    databaseReference.collection("shops")
+  void setConsumerInStore(String shopId, int nrOfConsumer) {
+    databaseReference
+        .collection("shops")
         .document(shopId)
-        .updateData({"customers": FieldValue.increment(amount)});
+        .updateData({"customerInStore": nrOfConsumer});
   }
 }

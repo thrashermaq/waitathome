@@ -5,8 +5,6 @@ App created in the CodeVsCovid19 hackaton in Switzerland. With the hacking boys 
 ## Setup
 - run `flutter pub run build_runner build` to create json converter methods
 
-
-
 ## Things to know
 
 ### Build json converters
