@@ -10,6 +10,8 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   int customers = 0;
   int limit = 10;
   int queue = 0;
+
+  var activeButton = [false, false, false];
   bool queueEnabled = false;
 
   @override
@@ -32,7 +34,12 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text('($queue)'),
+            Text(
+              '($queue)',
+              style: TextStyle(
+                fontSize: 36,
+              ),
+            ),
           ],
         ),
         Row(
@@ -54,42 +61,36 @@ class _CustomerTrackingState extends State<CustomerTracking> {
             )
           ],
         ),
+        Text('Warteschlange'),
         Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              FlatButton(
-                color: Colors.grey[200],
-                child: Text('5'),
-                onPressed: queueEnabled
-                    ? () {
-                        setQueue(5);
-                      }
-                    : null,
-              ),
-              FlatButton(
-                color: Colors.grey[200],
-                child: Text('10'),
-                onPressed: queueEnabled
-                    ? () {
-                        setQueue(10);
-                      }
-                    : null,
-              ),
-              FlatButton(
-                color: Colors.grey[200],
-                child: Text('15+'),
-                onPressed: queueEnabled
-                    ? () {
-                        setQueue(15);
-                      }
-                    : null,
-              ),
+              buildQueueButton(0, '5', 5),
+              buildQueueButton(1, '10', 10),
+              buildQueueButton(2, '15+', 15),
             ],
           ),
         )
       ],
+    );
+  }
+
+  FlatButton buildQueueButton(int index, String text, int numberOfPeople) {
+    return FlatButton(
+      disabledColor: Colors.grey[200],
+      color: activeButton[index] ? Colors.red[300] : Colors.grey[300],
+      shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(30.0),
+      ),
+      child: Text(text),
+      onPressed: queueEnabled
+          ? () {
+              setQueue(numberOfPeople);
+              setActiveButton(index);
+            }
+          : null,
     );
   }
 
@@ -126,5 +127,18 @@ class _CustomerTrackingState extends State<CustomerTracking> {
     setState(() {
       queue = queueSize;
     });
+  }
+
+  void setActiveButton(int index) {
+    if (activeButton[index]) {
+      setState(() {
+        activeButton = [false, false, false];
+      });
+    } else {
+      setState(() {
+        activeButton = [false, false, false];
+        activeButton[index] = true;
+      });
+    }
   }
 }
