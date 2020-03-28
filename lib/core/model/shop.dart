@@ -6,9 +6,9 @@ part 'shop.g.dart';
 class Shop {
   int id;
   String name;
-  int customers;
+  int customerInStore;
 
-  Shop(this.id, this.name, this.customers);
+  Shop(this.id, this.name, this.customerInStore);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

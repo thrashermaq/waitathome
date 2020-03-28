@@ -8,6 +8,20 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
+  login(String loginCode, void onLoginSuccessful(String shopId), void onLoginFailed()) {
+    Firestore.instance
+        .collection("shop-codes")
+        .document(loginCode)
+        .get()
+        .then((value) {
+      if (value.data == null) {
+        onLoginFailed();
+      } else {
+        onLoginSuccessful(value.data["shop-id"]);
+      }
+    });
+  }
+
   void getShop(String id, void onShopUpdate(Shop event)) {
     databaseReference
         .collection("shops")
@@ -19,17 +33,10 @@ class ShopService {
     }).onError((e) => print(e));
   }
 
-  void addCustomer(String shopId) {
-    changeCustomerBy(1, shopId);
-  }
-
-  void removeCustomer(String shopId) {
-    changeCustomerBy(-1, shopId);
-  }
-
-  void changeCustomerBy(int amount, String shopId) {
-    databaseReference.collection("shops")
+  void setConsumerInStore(String shopId, int nrOfConsumer) {
+    databaseReference
+        .collection("shops")
         .document(shopId)
-        .updateData({"customers": FieldValue.increment(amount)});
+        .updateData({"customerInStore": nrOfConsumer});
   }
 }
