@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:waitathome/core/model/marker_data.dart';
 
 class InfoWidget extends StatefulWidget {
-  double position;
-  MarkerData markerData;
+  final double position;
+  final MarkerData markerData;
 
   InfoWidget({this.position, this.markerData});
 
@@ -40,53 +40,9 @@ class _InfoWidgetState extends State<InfoWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          widget.markerData.shopName,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Personen: ${widget.markerData.peopleCount}, Schlange: ${widget.markerData.queueCount}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    widget.markerData.isFavourite
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: Colors.orange,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      widget.markerData.isFavourite =
-                          !widget.markerData.isFavourite;
-                    });
-                  },
-                ),
+                _buildStatusCircle(),
+                _buildShopInfo(),
+                _buildFavouriteButton(),
               ],
             ),
           ),
@@ -94,4 +50,51 @@ class _InfoWidgetState extends State<InfoWidget> {
       ),
     );
   }
+
+  IconButton _buildFavouriteButton() => IconButton(
+        icon: Icon(
+          widget.markerData.isFavourite ? Icons.star : Icons.star_border,
+          color: Colors.orange,
+        ),
+        onPressed: () {
+          setState(() {
+            widget.markerData.isFavourite = !widget.markerData.isFavourite;
+          });
+        },
+      );
+
+  Expanded _buildShopInfo() => Expanded(
+        child: Container(
+          margin: EdgeInsets.only(left: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                widget.markerData.shopName,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Personen: ${widget.markerData.peopleCount}, Schlange: ${widget.markerData.queueCount}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Container _buildStatusCircle() => Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          color: Colors.red,
+          shape: BoxShape.circle,
+        ),
+      );
 }
