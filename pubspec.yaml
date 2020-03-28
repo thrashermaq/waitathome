@@ -27,6 +27,8 @@ dependencies:
   json_annotation: ^3.0.1
   provider: ^4.0.4
 
+  pin_code_fields: ^2.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

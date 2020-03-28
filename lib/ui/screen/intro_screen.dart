@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waitathome/ui/screen/customer/customer_screen.dart';
-import 'package:waitathome/ui/screen/shop/shop_screen.dart';
+import 'package:waitathome/ui/screen/shop/shop_login.dart';
 
 class IntroScreen extends StatelessWidget {
   static const routeName = '/intro';
@@ -19,7 +19,6 @@ class IntroScreen extends StatelessWidget {
                     'Who are you?',
                     style: TextStyle(
                       fontSize: 48.0,
-                      height: 1.0,
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.w100,
                     ),
@@ -33,7 +32,7 @@ class IntroScreen extends StatelessWidget {
                   textColor: Colors.white,
                   padding: EdgeInsets.all(8.0),
                   onPressed: () {
-                    Navigator.pushNamed(context, ShopScreen.routeName);
+                    Navigator.pushNamed(context, ShopLoginScreen.routeName);
                   },
                   child: Row(
                     children: <Widget>[
