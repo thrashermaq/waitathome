@@ -8,14 +8,14 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  void getShop(String id, void onShop(Shop event)) {
+  void getShop(String id, void onShopUpdate(Shop event)) {
     databaseReference
         .collection("shops")
         .document(id)
         .snapshots()
         .listen((DocumentSnapshot documentSnapshot) {
       Map<String, dynamic> shopDto = documentSnapshot.data;
-      onShop(Shop.fromJson(shopDto));
+      onShopUpdate(Shop.fromJson(shopDto));
     }).onError((e) => print(e));
   }
 
