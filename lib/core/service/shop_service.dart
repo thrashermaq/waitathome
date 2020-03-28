@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:waitathome/core/model/login_code.dart';
 import 'package:waitathome/core/model/shop.dart';
 
 class ShopService {
@@ -8,8 +9,9 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  login(String loginCode, void onLoginSuccessful(String shopId), void onLoginFailed()) {
-    Firestore.instance
+  login(String loginCode, void onLoginSuccessful(String shopId),
+      void onLoginFailed()) {
+    databaseReference
         .collection("shop-codes")
         .document(loginCode)
         .get()
@@ -38,5 +40,48 @@ class ShopService {
         .collection("shops")
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
+  }
+
+  Future register(String shopName, String email) {
+    print("register shop with name $shopName");
+    var shop = Shop.create(shopName, email);
+
+    return saveShop(shop).then((shopId) {
+      return addShopLoginCode(shopId);
+    });
+  }
+
+  Future saveShop(Shop shop) {
+    return databaseReference
+        .collection("shops")
+        .add(shop.toJson())
+        .then((ref) => ref.documentID);
+  }
+
+  Future addShopLoginCode(String shopId) async {
+    var generatedCode = LoginCode.generate();
+
+    var loginCodeEx = await existsLoginCode(generatedCode);
+    print("loginCodeexists $loginCodeEx");
+    if (loginCodeEx) {
+      print("generated login code already exists, try generate again");
+      return addShopLoginCode(shopId);
+    }
+
+    return databaseReference
+        .collection("shop-codes")
+        .document(generatedCode.toString())
+        .setData({"shop-id": shopId}).then((ref) => generatedCode);
+  }
+
+  Future<bool> existsLoginCode(int loginCode) {
+    return databaseReference
+        .collection("shop-codes")
+        .document(loginCode.toString())
+        .get()
+        .then<bool>((value) {
+      print("value $value");
+      return value.data != null;
+    });
   }
 }
