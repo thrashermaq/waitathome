@@ -27,6 +27,11 @@ class RegisterFormState extends State<RegisterScreen> {
         child: new Form(
           key: _formKey,
           child: new Column(children: <Widget>[
+            Image(
+              image: AssetImage('assets/images/register_image.png'),
+              height: 200,
+              width: 200,
+            ),
             new ListTile(
               leading: const Icon(Icons.account_circle), // shopping_cart
               title: new TextFormField(
