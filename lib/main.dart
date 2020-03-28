@@ -10,8 +10,10 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => new ShopService(),
+    return MultiProvider(
+      providers: [
+        Provider<ShopService>(create: (_) => new ShopService())
+      ],
       child: MaterialApp(
         initialRoute: '/',
         routes: {
