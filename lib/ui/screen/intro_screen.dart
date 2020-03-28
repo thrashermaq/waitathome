@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waitathome/ui/components/custom_button.dart';
+import 'package:waitathome/ui/screen/customer/customer_screen.dart';
+import 'package:waitathome/ui/screen/shop/shop_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   static const routeName = '/intro';
@@ -13,11 +15,15 @@ class IntroScreen extends StatelessWidget {
           children: <Widget>[
             CustomButton(
               label: 'Shop',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, ShopScreen.routeName);
+              },
             ),
             CustomButton(
               label: 'Customer',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, CustomerScreen.routeName);
+              },
             ),
           ],
         ),
