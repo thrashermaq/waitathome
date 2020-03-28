@@ -3,16 +3,29 @@ import 'package:waitathome/core/model/login_code.dart';
 import 'package:waitathome/core/model/shop.dart';
 
 class ShopService {
+  static const SHOPS_TABLE_NAME = "shops";
+  static const SHOP_CODES_TABLE_NAME = "shop-codes";
+
   var databaseReference;
 
   ShopService() {
     this.databaseReference = Firestore.instance;
   }
 
+  loadAll(void onLoaded(List<Shop> shops))  {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      List<Shop> shops = snapshot.documents.map((f) => Shop.fromJson(f.data)).toList();
+      onLoaded(shops);
+    });
+  }
+
   login(String loginCode, void onLoginSuccessful(String shopId),
       void onLoginFailed()) {
     databaseReference
-        .collection("shop-codes")
+        .collection(SHOP_CODES_TABLE_NAME)
         .document(loginCode)
         .get()
         .then((value) {
@@ -26,7 +39,7 @@ class ShopService {
 
   void getShop(String id, void onShopUpdate(Shop event)) {
     databaseReference
-        .collection("shops")
+        .collection(SHOPS_TABLE_NAME)
         .document(id)
         .snapshots()
         .listen((DocumentSnapshot documentSnapshot) {
@@ -37,7 +50,7 @@ class ShopService {
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {
     databaseReference
-        .collection("shops")
+        .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
   }
@@ -53,7 +66,7 @@ class ShopService {
 
   Future saveShop(Shop shop) {
     return databaseReference
-        .collection("shops")
+        .collection(SHOPS_TABLE_NAME)
         .add(shop.toJson())
         .then((ref) => ref.documentID);
   }
@@ -69,14 +82,14 @@ class ShopService {
     }
 
     return databaseReference
-        .collection("shop-codes")
+        .collection(SHOP_CODES_TABLE_NAME)
         .document(generatedCode.toString())
         .setData({"shop-id": shopId}).then((ref) => generatedCode);
   }
 
   Future<bool> existsLoginCode(int loginCode) {
     return databaseReference
-        .collection("shop-codes")
+        .collection(SHOP_CODES_TABLE_NAME)
         .document(loginCode.toString())
         .get()
         .then<bool>((value) {
