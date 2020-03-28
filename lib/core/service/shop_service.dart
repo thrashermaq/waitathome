@@ -42,9 +42,9 @@ class ShopService {
         .updateData({"customerInStore": nrOfConsumer});
   }
 
-  Future register(String shopName) {
+  Future register(String shopName, String email) {
     print("register shop with name $shopName");
-    var shop = new Shop(null, shopName, 0);
+    var shop = new Shop(null, shopName, email, 0);
 
     return saveShop(shop).then((shopId) {
       return addShopLoginCode(shopId);

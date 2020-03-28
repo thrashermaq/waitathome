@@ -18,6 +18,7 @@ class RegisterFormState extends State<RegisterScreen> {
   // and allows validation of the form.
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +42,24 @@ class RegisterFormState extends State<RegisterScreen> {
                 },
               ),
             ),
+            new ListTile(
+              leading: const Icon(Icons.email), // shopping_cart
+              title: new TextFormField(
+                controller: emailController,
+                decoration: new InputDecoration(
+                  hintText: "Email",
+                ),
+              ),
+            ),
             new CustomButton(
               label: "Speichern",
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   var shopService =
                       Provider.of<ShopService>(context, listen: false);
-                  shopService.register(nameController.text).then((shopId) {
+                  shopService.register(nameController.text, emailController.text).then((shopId) {
                     print("shop saved with id $shopId");
                   });
-                  ;
                 }
               },
             )
