@@ -24,16 +24,7 @@ class _InfoWidgetState extends State<InfoWidget> {
         child: Container(
           margin: EdgeInsets.all(20),
           height: 70,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  blurRadius: 20,
-                  offset: Offset.zero,
-                  color: Colors.grey.withOpacity(0.5),
-                )
-              ]),
+          decoration: circularBoxDecoration(),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
@@ -97,4 +88,17 @@ class _InfoWidgetState extends State<InfoWidget> {
           shape: BoxShape.circle,
         ),
       );
+
+  BoxDecoration circularBoxDecoration() {
+    return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            blurRadius: 20,
+            offset: Offset.zero,
+            color: Colors.grey.withOpacity(0.5),
+          )
+        ]);
+  }
 }

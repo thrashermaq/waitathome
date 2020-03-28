@@ -18,12 +18,14 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   String _mapStyle;
   GoogleMapController mapController;
-  BitmapDescriptor markerIcon;
+  BitmapDescriptor greenMarker;
+  BitmapDescriptor orangeMarker;
+  BitmapDescriptor redMarker;
 
   final LatLng _center = START_LOCATION;
   Set<Marker> _markers = new Set();
 
-  double pinPillPosition = -100;
+  double infoWidgetPosition = -100;
 
   MarkerData selectedPin = MarkerData(
       shopName: 'Coop Bern',
@@ -38,13 +40,17 @@ class _MapScreenState extends State<MapScreen> {
     rootBundle.loadString('assets/map_style.txt').then((string) {
       _mapStyle = string;
     });
-
-    setCustomMapPin();
+    loadCustomMarkers();
   }
 
-  void setCustomMapPin() async {
-    markerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5), 'assets/images/marker.png');
+  loadCustomMarkers() async {
+    var config = ImageConfiguration(devicePixelRatio: 2);
+    greenMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_green.png');
+    orangeMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_orange.png');
+    redMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_red.png');
   }
 
   @override
@@ -59,23 +65,13 @@ class _MapScreenState extends State<MapScreen> {
               mapController = controller;
               mapController.setMapStyle(_mapStyle);
               setState(() {
-                _markers.add(Marker(
-                  markerId: MarkerId('1'),
-                  position: LatLng(46.94809, 7.44744),
-                  icon: markerIcon,
-                  onTap: () {
-                    setState(() {
-                      // TODO: selectedPin = sourcePinInfo;
-                      pinPillPosition = 0;
-                    });
-                  },
-                ));
+                loadMarkers();
               });
             },
             onTap: (LatLng location) {
               // reset info widget
               setState(() {
-                pinPillPosition = -100;
+                infoWidgetPosition = -100;
               });
             },
             initialCameraPosition: CameraPosition(
@@ -84,10 +80,33 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
           InfoWidget(
-            position: pinPillPosition,
+            position: infoWidgetPosition,
             markerData: selectedPin,
           ),
         ],
+      ),
+    );
+  }
+
+  void loadMarkers() {
+    addMarker(MarkerId('1'), LatLng(46.94709, 7.44944), greenMarker);
+    addMarker(MarkerId('2'), LatLng(46.94850, 7.44784), greenMarker);
+    addMarker(MarkerId('3'), LatLng(46.94971, 7.44700), orangeMarker);
+    addMarker(MarkerId('4'), LatLng(46.94809, 7.44602), redMarker);
+  }
+
+  void addMarker(MarkerId id, LatLng latLng, BitmapDescriptor icon) {
+    _markers.add(
+      Marker(
+        markerId: id,
+        position: latLng,
+        icon: icon,
+        onTap: () {
+          setState(() {
+            // TODO: selectedPin = sourcePinInfo;
+            infoWidgetPosition = 0;
+          });
+        },
       ),
     );
   }
