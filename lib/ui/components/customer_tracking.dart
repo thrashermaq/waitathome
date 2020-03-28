@@ -120,6 +120,9 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void setQueue(int queueSize) {
+    if (queue == queueSize) {
+      queueSize = 0;
+    }
     setState(() {
       queue = queueSize;
     });
