@@ -8,17 +8,18 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  login(String loginCode, void onLoginSuccessful(String shopId), void onLoginFailed()) {
+  login(String loginCode, void onLoginSuccessful(String shopId),
+      void onLoginFailed()) {
     Firestore.instance
         .collection("shop-codes")
         .document(loginCode)
         .get()
         .then((value) {
-          if (value.data == null) {
-            onLoginFailed();
-          } else {
-            onLoginSuccessful(value.data["shop-id"]);
-          }
+      if (value.data == null) {
+        onLoginFailed();
+      } else {
+        onLoginSuccessful(value.data["shop-id"]);
+      }
     });
   }
 
@@ -38,5 +39,15 @@ class ShopService {
         .collection("shops")
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
+  }
+
+  Future<String> register(String shopName) {
+    print("register shop with name $shopName");
+
+    var shop = new Shop(null, shopName, 0);
+
+    return databaseReference.collection("shops").add(shop.toJson()).then((ref) {
+      return ref.documentID;
+    });
   }
 }
