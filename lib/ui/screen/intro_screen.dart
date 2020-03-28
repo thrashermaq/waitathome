@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waitathome/ui/components/custom_button.dart';
-import 'package:waitathome/ui/screen/customer/customer_screen.dart';
+import 'package:waitathome/ui/screen/customer/map_screen.dart';
 import 'package:waitathome/ui/screen/shop/shop_screen.dart';
 
 class IntroScreen extends StatelessWidget {
@@ -22,7 +22,7 @@ class IntroScreen extends StatelessWidget {
             CustomButton(
               label: 'Customer',
               onPressed: () {
-                Navigator.pushNamed(context, CustomerScreen.routeName);
+                Navigator.pushNamed(context, MapScreen.routeName);
               },
             ),
           ],
