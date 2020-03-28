@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waitathome/ui/components/customer_tracking.dart';
 
 class ShopScreen extends StatelessWidget {
   static const routeName = '/shop';
@@ -6,9 +7,7 @@ class ShopScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Text('Shop'),
-        ),
+        child: CustomerTracking(),
       ),
     );
   }
