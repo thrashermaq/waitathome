@@ -1,4 +1,3 @@
-import 'package:waitathome/core/model/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:waitathome/core/model/shop.dart';
 
@@ -9,8 +8,6 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  static Model getModel() => Model(10, 'Test');
-
   void getShop(String id, void onShop(Shop event)) {
     databaseReference
         .collection("shops")
@@ -20,5 +17,19 @@ class ShopService {
       Map<String, dynamic> shopDto = documentSnapshot.data;
       onShop(Shop.fromJson(shopDto));
     }).onError((e) => print(e));
+  }
+
+  void addCustomer(String shopId) {
+    changeCustomerBy(1, shopId);
+  }
+
+  void removeCustomer(String shopId) {
+    changeCustomerBy(-1, shopId);
+  }
+
+  void changeCustomerBy(int amount, String shopId) {
+    databaseReference.collection("shops")
+        .document(shopId)
+        .updateData({"customers": FieldValue.increment(amount)});
   }
 }
