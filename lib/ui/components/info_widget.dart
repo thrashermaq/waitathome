@@ -1,55 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:waitathome/core/model/marker_data.dart';
+import 'package:waitathome/core/model/shop.dart';
 
 class InfoWidget extends StatefulWidget {
   final double position;
-  final MarkerData markerData;
+  final Shop shop;
 
-  InfoWidget({this.position, this.markerData});
+  InfoWidget({this.position, this.shop});
 
   @override
   _InfoWidgetState createState() => _InfoWidgetState();
 }
 
 class _InfoWidgetState extends State<InfoWidget> {
+  bool isFavourite = false;
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      bottom: widget.position,
-      right: 0,
-      left: 0,
-      duration: Duration(milliseconds: 200),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          margin: EdgeInsets.all(20),
-          height: 70,
-          decoration: circularBoxDecoration(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildStatusCircle(),
-                _buildShopInfo(),
-                _buildFavouriteButton(),
-              ],
+    return widget.shop != null
+        ? AnimatedPositioned(
+            bottom: widget.position,
+            right: 0,
+            left: 0,
+            duration: Duration(milliseconds: 200),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.all(20),
+                height: 70,
+                decoration: circularBoxDecoration(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _buildStatusCircle(),
+                      _buildShopInfo(),
+                      _buildFavouriteButton(),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Container();
   }
 
   IconButton _buildFavouriteButton() => IconButton(
         icon: Icon(
-          widget.markerData.isFavourite ? Icons.star : Icons.star_border,
+          isFavourite ? Icons.star : Icons.star_border,
           color: Colors.orange,
         ),
         onPressed: () {
           setState(() {
-            widget.markerData.isFavourite = !widget.markerData.isFavourite;
+            isFavourite = !isFavourite;
+            // TODO: Safe state to local store
           });
         },
       );
@@ -62,14 +67,14 @@ class _InfoWidgetState extends State<InfoWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                widget.markerData.shopName,
+                widget.shop.name,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                'Personen: ${widget.markerData.peopleCount}, Schlange: ${widget.markerData.queueCount}',
+                'Personen: ${widget.shop.customerInStore}',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -80,25 +85,38 @@ class _InfoWidgetState extends State<InfoWidget> {
         ),
       );
 
-  Container _buildStatusCircle() => Container(
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          shape: BoxShape.circle,
-        ),
-      );
+  Container _buildStatusCircle() {
+    return Container(
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+        color: _getStatusColor(),
+        shape: BoxShape.circle,
+      ),
+    );
+  }
 
   BoxDecoration circularBoxDecoration() {
     return BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(50)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            blurRadius: 20,
-            offset: Offset.zero,
-            color: Colors.grey.withOpacity(0.5),
-          )
-        ]);
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(50)),
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          blurRadius: 20,
+          offset: Offset.zero,
+          color: Colors.grey.withOpacity(0.5),
+        )
+      ],
+    );
+  }
+
+  Color _getStatusColor() {
+    var customer = widget.shop.customerInStore;
+    if (customer < 25) {
+      return Colors.green;
+    } else if (customer < 50) {
+      return Colors.orange;
+    }
+    return Colors.red;
   }
 }

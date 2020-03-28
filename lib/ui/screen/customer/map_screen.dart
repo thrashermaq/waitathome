@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:waitathome/core/model/marker_data.dart';
+import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/ui/components/info_widget.dart';
 
 const double CAMERA_ZOOM = 15;
@@ -27,12 +29,7 @@ class _MapScreenState extends State<MapScreen> {
 
   double infoWidgetPosition = -100;
 
-  MarkerData selectedPin = MarkerData(
-      shopName: 'Coop Bern',
-      statusColor: Colors.orange,
-      peopleCount: 37,
-      queueCount: 0,
-      isFavourite: false);
+  Shop selectedShop;
 
   @override
   void initState() {
@@ -81,7 +78,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           InfoWidget(
             position: infoWidgetPosition,
-            markerData: selectedPin,
+            shop: selectedShop,
           ),
         ],
       ),
@@ -89,25 +86,41 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void loadMarkers() {
-    addMarker(MarkerId('1'), LatLng(46.94709, 7.44944), greenMarker);
-    addMarker(MarkerId('2'), LatLng(46.94850, 7.44784), greenMarker);
-    addMarker(MarkerId('3'), LatLng(46.94971, 7.44700), orangeMarker);
-    addMarker(MarkerId('4'), LatLng(46.94809, 7.44602), redMarker);
+    List<Shop> shops = new List();
+    shops.add(Shop(1, 'Coop Bern', null, 46.94709, 7.44944, 10));
+    shops.add(Shop(2, 'Migros Aare', null, 46.94850, 7.44784, 20));
+    shops.add(Shop(3, 'Denner', null, 46.94971, 7.44700, 40));
+    shops.add(Shop(4, 'Gemüseladen', null, 46.94809, 7.44602, 50));
+
+    shops.forEach((shop) {
+      return addMarker(shop);
+    });
   }
 
-  void addMarker(MarkerId id, LatLng latLng, BitmapDescriptor icon) {
+  void addMarker(Shop shop) {
     _markers.add(
       Marker(
-        markerId: id,
-        position: latLng,
-        icon: icon,
+        markerId: MarkerId(shop.id.toString()),
+        position: LatLng(shop.lat, shop.long),
+        icon: getMarker(shop),
         onTap: () {
           setState(() {
-            // TODO: selectedPin = sourcePinInfo;
             infoWidgetPosition = 0;
+            selectedShop = shop;
+            log(shop.toString());
           });
         },
       ),
     );
+  }
+
+  getMarker(Shop shop) {
+    var customer = shop.customerInStore;
+    if (customer < 25) {
+      return greenMarker;
+    } else if (customer < 50) {
+      return orangeMarker;
+    }
+    return redMarker;
   }
 }
