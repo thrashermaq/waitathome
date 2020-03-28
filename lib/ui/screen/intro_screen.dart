@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:waitathome/ui/components/custom_button.dart';
 
 class IntroScreen extends StatelessWidget {
   static const routeName = '/intro';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,12 +11,12 @@ class IntroScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
-              child: Text('Shop'),
+            CustomButton(
+              label: 'Shop',
               onPressed: () {},
             ),
-            FlatButton(
-              child: Text('Customer'),
+            CustomButton(
+              label: 'Customer',
               onPressed: () {},
             ),
           ],

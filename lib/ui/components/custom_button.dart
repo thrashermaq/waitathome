@@ -9,9 +9,16 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: Text(label),
-      onPressed: onPressed,
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: RaisedButton(
+        child: Text(
+          this.label,
+          style: TextStyle(color: Colors.white),
+        ),
+        onPressed: onPressed,
+        color: Colors.blueAccent,
+      ),
     );
   }
 }
