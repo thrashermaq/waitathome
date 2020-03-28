@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1083901499596",
+    "firebase_url": "https://waitathome-210b1.firebaseio.com",
+    "project_id": "waitathome-210b1",
+    "storage_bucket": "waitathome-210b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083901499596:android:c571304b4faf55cf99ca69",
+        "android_client_info": {
+          "package_name": "com.rawicoding.waitathome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083901499596-a1se71uv1aa87v3o72au68gkgjtlclt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmU81gXI4JmyxGEp2ywmhdphG2gqwQ7Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083901499596-a1se71uv1aa87v3o72au68gkgjtlclt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
