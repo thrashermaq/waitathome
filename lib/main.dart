@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/screen/customer/customer_screen.dart';
 import 'package:waitathome/ui/screen/customer/map_screen.dart';
 import 'package:waitathome/ui/screen/intro_screen.dart';
 import 'package:waitathome/ui/screen/shop/register_screen.dart';
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => IntroScreen(),
           IntroScreen.routeName: (context) => IntroScreen(),
-          CustomerScreen.routeName: (context) => CustomerScreen(),
           ShopScreen.routeName: (context) => ShopScreen(),
           RegisterScreen.routeName: (context) => RegisterScreen(),
           MapScreen.routeName: (context) => MapScreen(),

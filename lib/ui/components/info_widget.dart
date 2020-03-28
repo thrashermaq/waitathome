@@ -12,6 +12,7 @@ class InfoWidget extends StatefulWidget {
 }
 
 class _InfoWidgetState extends State<InfoWidget> {
+  // TODO: Load favourite from local store
   bool isFavourite = false;
 
   @override

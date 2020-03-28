@@ -28,7 +28,6 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _markers = new Set();
 
   double infoWidgetPosition = -100;
-
   Shop selectedShop;
 
   @override
@@ -40,42 +39,12 @@ class _MapScreenState extends State<MapScreen> {
     loadCustomMarkers();
   }
 
-  loadCustomMarkers() async {
-    var config = ImageConfiguration(devicePixelRatio: 2);
-    greenMarker = await BitmapDescriptor.fromAssetImage(
-        config, 'assets/images/marker_green.png');
-    orangeMarker = await BitmapDescriptor.fromAssetImage(
-        config, 'assets/images/marker_orange.png');
-    redMarker = await BitmapDescriptor.fromAssetImage(
-        config, 'assets/images/marker_red.png');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          GoogleMap(
-            markers: _markers,
-            myLocationEnabled: true,
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-              mapController.setMapStyle(_mapStyle);
-              setState(() {
-                loadMarkers();
-              });
-            },
-            onTap: (LatLng location) {
-              // reset info widget
-              setState(() {
-                infoWidgetPosition = -100;
-              });
-            },
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: CAMERA_ZOOM,
-            ),
-          ),
+          _buildGoogleMap(),
           InfoWidget(
             position: infoWidgetPosition,
             shop: selectedShop,
@@ -85,7 +54,34 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  GoogleMap _buildGoogleMap() {
+    return GoogleMap(
+      markers: _markers,
+      myLocationEnabled: true,
+      onMapCreated: _onMapCreated,
+      onTap: (LatLng location) {
+        setState(() {
+          // reset info widget and trigger animation
+          infoWidgetPosition = -100;
+        });
+      },
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: CAMERA_ZOOM,
+      ),
+    );
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    mapController.setMapStyle(_mapStyle);
+    setState(() {
+      loadMarkers();
+    });
+  }
+
   void loadMarkers() {
+    // TODO: Get shops from firebase
     List<Shop> shops = new List();
     shops.add(Shop(1, 'Coop Bern', null, 46.94709, 7.44944, 10));
     shops.add(Shop(2, 'Migros Aare', null, 46.94850, 7.44784, 20));
@@ -93,25 +89,21 @@ class _MapScreenState extends State<MapScreen> {
     shops.add(Shop(4, 'Gemüseladen', null, 46.94809, 7.44602, 50));
 
     shops.forEach((shop) {
-      return addMarker(shop);
+      _markers.add(
+        Marker(
+          markerId: MarkerId(shop.id.toString()),
+          position: LatLng(shop.lat, shop.long),
+          icon: getMarker(shop),
+          onTap: () {
+            setState(() {
+              infoWidgetPosition = 0;
+              selectedShop = shop;
+              log(shop.toString());
+            });
+          },
+        ),
+      );
     });
-  }
-
-  void addMarker(Shop shop) {
-    _markers.add(
-      Marker(
-        markerId: MarkerId(shop.id.toString()),
-        position: LatLng(shop.lat, shop.long),
-        icon: getMarker(shop),
-        onTap: () {
-          setState(() {
-            infoWidgetPosition = 0;
-            selectedShop = shop;
-            log(shop.toString());
-          });
-        },
-      ),
-    );
   }
 
   getMarker(Shop shop) {
@@ -122,5 +114,15 @@ class _MapScreenState extends State<MapScreen> {
       return orangeMarker;
     }
     return redMarker;
+  }
+
+  loadCustomMarkers() async {
+    var config = ImageConfiguration(devicePixelRatio: 2);
+    greenMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_green.png');
+    orangeMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_orange.png');
+    redMarker = await BitmapDescriptor.fromAssetImage(
+        config, 'assets/images/marker_red.png');
   }
 }
