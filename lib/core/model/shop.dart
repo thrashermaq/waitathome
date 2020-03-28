@@ -7,9 +7,15 @@ class Shop {
   int id;
   String name;
   String email;
+  double lat;
+  double long;
   int customerInStore;
 
-  Shop(this.id, this.name, this.email, this.customerInStore);
+  Shop(this.id, this.name, this.email, this.lat, this.long,
+      this.customerInStore);
+
+  factory Shop.create(String name, String email) =>
+      new Shop(null, name, email, 0, 0, 0);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

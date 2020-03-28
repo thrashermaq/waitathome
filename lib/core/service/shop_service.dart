@@ -44,7 +44,7 @@ class ShopService {
 
   Future register(String shopName, String email) {
     print("register shop with name $shopName");
-    var shop = new Shop(null, shopName, email, 0);
+    var shop = Shop.create(shopName, email);
 
     return saveShop(shop).then((shopId) {
       return addShopLoginCode(shopId);
