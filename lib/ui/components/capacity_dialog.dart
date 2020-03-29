@@ -30,6 +30,11 @@ class _CapacityDialogState extends State<CapacityDialog> {
       ),
       actions: <Widget>[
         FlatButton(
+          child: Text('Abbrechen'),
+          onPressed: () => Navigator.pop(context),
+          textColor: Colors.grey[600],
+        ),
+        FlatButton(
           child: Text('Speichern'),
           onPressed: () {
             var value = customController.text.toString();
@@ -39,10 +44,6 @@ class _CapacityDialogState extends State<CapacityDialog> {
             Navigator.pop(context);
           },
         ),
-        FlatButton(
-          child: Text('Abbrechen'),
-          onPressed: () => Navigator.pop(context),
-        )
       ],
     );
   }

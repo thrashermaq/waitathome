@@ -28,7 +28,13 @@ class _ShopScreenState extends State<ShopScreen> {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: SafeArea(
-        child: _buildCustomerTracker(shopId),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 20,
+          ),
+          child: _buildCustomerTracker(shopId),
+        ),
       ),
     );
   }
@@ -49,69 +55,93 @@ class _ShopScreenState extends State<ShopScreen> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Spacer(),
-              Text(
-                '${shop.name}',
-                style: TextStyle(
-                  fontSize: 44,
-                ),
+              SizedBox(
+                height: 30,
               ),
-              Text(
-                'Anzahl Kunden im Laden',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey[600],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  '${shop.customerInStore}',
-                  style: TextStyle(
-                    fontSize: 150,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              _buildHeader(),
+              _buildCounterDisplay(),
               _buildCountButtons(shop),
-              Spacer(),
-              Text(
-                'Warteschlange',
-                style: TextStyle(
-                  fontSize: 25,
-                ),
+              SizedBox(
+                height: 50,
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    buildQueueButton(QueueTypes.SMALL, storeIsFull),
-                    buildQueueButton(QueueTypes.MEDIUM, storeIsFull),
-                    buildQueueButton(QueueTypes.BIG, storeIsFull),
-                  ],
-                ),
-              ),
-              Spacer(),
-              InkWell(
-                child: Text(
-                  'Ladenkapazität anpassen',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 16,
-                  ),
-                ),
-                onTap: () {
-                  _showCapacityDialog(context);
-                },
-              ),
-              Spacer(),
+              _buildFooter(storeIsFull, context),
             ],
           );
         });
+  }
+
+  Column _buildFooter(bool storeIsFull, BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Warteschlange',
+          style: TextStyle(
+            fontSize: 25,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: 30,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _buildQueueButton(QueueTypes.SMALL, storeIsFull),
+              _buildQueueButton(QueueTypes.MEDIUM, storeIsFull),
+              _buildQueueButton(QueueTypes.BIG, storeIsFull),
+            ],
+          ),
+        ),
+        InkWell(
+          child: Text(
+            'Ladenkapazität anpassen',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 16,
+            ),
+          ),
+          onTap: () {
+            _showCapacityDialog(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  Padding _buildCounterDisplay() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Text(
+        '${shop.customerInStore}',
+        style: TextStyle(
+          fontSize: 130,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Column _buildHeader() {
+    return Column(
+      children: <Widget>[
+        Text(
+          '${shop.name}',
+          style: TextStyle(
+            fontSize: 44,
+          ),
+        ),
+        Text(
+          'Anzahl Kunden im Laden',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
   }
 
   Row _buildCountButtons(Shop shop) {
@@ -146,7 +176,7 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
-  QueueButton buildQueueButton(QueueTypes queueType, bool isStoreFull) {
+  QueueButton _buildQueueButton(QueueTypes queueType, bool isStoreFull) {
     return QueueButton(
       label: queueType.buttonText,
       active: isActive(shop.queue, queueType.value),
