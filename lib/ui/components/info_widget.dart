@@ -28,9 +28,7 @@ class _InfoWidgetState extends State<InfoWidget> {
         stream: shopStream,
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: Text('Loading'),
-            );
+            return Container();
           }
 
           Map<String, dynamic> shopDto = snapshot.data.data;
@@ -88,14 +86,14 @@ class _InfoWidgetState extends State<InfoWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                shop.name,
+                '${shop.name} (${shop.customerInStore} / ${shop.limit})',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
-                'Personen: ${shop.customerInStore}',
+                'Schlange: ${shop.queue}',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -107,12 +105,19 @@ class _InfoWidgetState extends State<InfoWidget> {
       );
 
   Container _buildStatusCircle(Shop shop) {
+    var color = _getStatusColor(shop);
     return Container(
       height: 50,
       width: 50,
       decoration: BoxDecoration(
-        color: _getStatusColor(shop.customerInStore),
+        color: color,
         shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Icon(
+          Icons.shopping_cart,
+          color: color[50],
+        ),
       ),
     );
   }
@@ -131,10 +136,12 @@ class _InfoWidgetState extends State<InfoWidget> {
     );
   }
 
-  Color _getStatusColor(int customerInStore) {
-    if (customerInStore < 25) {
+  MaterialColor _getStatusColor(Shop shop) {
+    var limit = shop.limit;
+    var customerInStore = shop.customerInStore;
+    if (customerInStore < (limit / 2)) {
       return Colors.green;
-    } else if (customerInStore < 50) {
+    } else if (customerInStore < limit) {
       return Colors.orange;
     }
     return Colors.red;

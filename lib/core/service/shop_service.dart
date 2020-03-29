@@ -20,6 +20,7 @@ class ShopService {
       List<Shop> shops = snapshot.documents.map((document) {
         var shop = Shop.fromJson(document.data);
         shop.id = document.documentID;
+        return shop;
       }).toList();
       onLoaded(shops);
     });
