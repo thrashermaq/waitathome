@@ -6,14 +6,8 @@ class ShopService {
   static const SHOPS_TABLE_NAME = "shops";
   static const SHOP_CODES_TABLE_NAME = "shop-codes";
 
-  var databaseReference;
-
-  ShopService() {
-    this.databaseReference = Firestore.instance;
-  }
-
   loadAll(void onLoaded(List<Shop> shops)) {
-    databaseReference
+    Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
@@ -26,9 +20,13 @@ class ShopService {
     });
   }
 
+  Stream<QuerySnapshot> getShops() {
+    return Firestore.instance.collectionGroup(SHOPS_TABLE_NAME).snapshots();
+  }
+
   login(String loginCode, void onLoginSuccessful(String shopId),
       void onLoginFailed()) {
-    databaseReference
+    Firestore.instance
         .collection(SHOP_CODES_TABLE_NAME)
         .document(loginCode)
         .get()
@@ -42,7 +40,7 @@ class ShopService {
   }
 
   getShop(String id) {
-    return databaseReference
+    return Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(id)
         .snapshots();
@@ -50,21 +48,21 @@ class ShopService {
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {
     print('Update store with id: $shopId with $nrOfConsumer consumers');
-    databaseReference
+    Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
   }
 
   void setLimit(String shopId, int limit) {
-    databaseReference
+    Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"limit": limit});
   }
 
   void setQueue(String shopId, int queue) {
-    databaseReference
+    Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"queue": queue});
@@ -80,7 +78,7 @@ class ShopService {
   }
 
   Future saveShop(Shop shop) {
-    return databaseReference
+    return Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .add(shop.toJson())
         .then((ref) => ref.documentID);
@@ -96,14 +94,14 @@ class ShopService {
       return addShopLoginCode(shopId);
     }
 
-    return databaseReference
+    return Firestore.instance
         .collection(SHOP_CODES_TABLE_NAME)
         .document(generatedCode.toString())
         .setData({"shop-id": shopId}).then((ref) => generatedCode);
   }
 
   Future<bool> existsLoginCode(int loginCode) {
-    return databaseReference
+    return Firestore.instance
         .collection(SHOP_CODES_TABLE_NAME)
         .document(loginCode.toString())
         .get()

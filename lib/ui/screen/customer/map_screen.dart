@@ -12,6 +12,8 @@ const LatLng START_LOCATION = LatLng(46.94809, 7.44744);
 
 /// TODO: Package for search: https://pub.dev/packages/search_map_place
 class MapScreen extends StatefulWidget {
+  MapScreen({@required Key key});
+
   static const routeName = '/map';
 
   @override
@@ -85,7 +87,14 @@ class _MapScreenState extends State<MapScreen> {
 
   void loadMarkers() {
     var shopService = Provider.of<ShopService>(context, listen: false);
-    shopService.loadAll((shops) => addMarkers(shops));
+    shopService.getShops().listen((snapshot) {
+      List<Shop> shops = snapshot.documents.map((document) {
+        var shop = Shop.fromJson(document.data);
+        shop.id = document.documentID;
+        return shop;
+      }).toList();
+      addMarkers(shops);
+    });
   }
 
   void addMarkers(List<Shop> shops) {

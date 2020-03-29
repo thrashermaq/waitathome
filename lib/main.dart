@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           ShopScreen.routeName: (context) => ShopScreen(),
           ShopLoginScreen.routeName: (context) => ShopLoginScreen(),
           RegisterScreen.routeName: (context) => RegisterScreen(),
-          MapScreen.routeName: (context) => MapScreen(),
+          MapScreen.routeName: (context) => MapScreen(key: UniqueKey()),
         },
       ),
     );
