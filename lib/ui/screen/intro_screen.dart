@@ -37,7 +37,7 @@ class IntroScreen extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Image(
-                        image: AssetImage('images/intro-shop.png'),
+                        image: AssetImage('assets/images/intro_shop.png'),
                         height: 115,
                         width: 115,
                       ),
@@ -73,7 +73,7 @@ class IntroScreen extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Image(
-                        image: AssetImage('images/intro-customer.png'),
+                        image: AssetImage('assets/images/intro_customer.png'),
                         height: 115,
                         width: 115,
                       ),
