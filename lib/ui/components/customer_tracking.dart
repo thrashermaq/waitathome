@@ -66,8 +66,8 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 50,
-                    right: 50,
+                    left: 20,
+                    right: 20,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
