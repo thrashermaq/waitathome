@@ -29,32 +29,34 @@ class RegisterFormState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: new Form(
-          key: _formKey,
-          child: new Column(children: <Widget>[
-            Image(
-              image: AssetImage('assets/images/register_image.png'),
-              height: 225,
-              width: 225,
-            ),
-            nameColumn(),
-            emailColumn(),
-            positionColumn(context),
-            new CustomButton(
-              label: "Speichern",
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  var shopService =
-                      Provider.of<ShopService>(context, listen: false);
-                  shopService
-                      .register(nameController.text, emailController.text)
-                      .then((shopId) {
-                    print("shop saved with id $shopId");
-                  });
-                }
-              },
-            )
-          ]),
+        child: SingleChildScrollView(
+          child: new Form(
+            key: _formKey,
+            child: new Column(children: <Widget>[
+              Image(
+                image: AssetImage('assets/images/register_image.png'),
+                height: 225,
+                width: 225,
+              ),
+              nameColumn(),
+              emailColumn(),
+              positionColumn(context),
+              new CustomButton(
+                label: "Speichern",
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    var shopService =
+                        Provider.of<ShopService>(context, listen: false);
+                    shopService
+                        .register(nameController.text, emailController.text)
+                        .then((shopId) {
+                      print("shop saved with id $shopId");
+                    });
+                  }
+                },
+              )
+            ]),
+          ),
         ),
       ),
     );
