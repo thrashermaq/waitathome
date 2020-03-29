@@ -9,12 +9,12 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                Center(
                   child: Text(
                     'Who are you?',
                     style: TextStyle(
@@ -24,79 +24,79 @@ class IntroScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: FlatButton(
-                  color: Colors.teal,
-                  textColor: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  onPressed: () {
-                    Navigator.pushNamed(context, ShopLoginScreen.routeName);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Image(
-                        image: AssetImage('assets/images/intro_shop.png'),
-                        height: 115,
-                        width: 115,
-                      ),
-                      Expanded(
-                        child: Padding(
+                Container(
+                  height: 48.0,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: FlatButton(
+                    color: Colors.teal,
+                    textColor: Colors.white,
+                    padding: EdgeInsets.all(8.0),
+                    onPressed: () {
+                      Navigator.pushNamed(context, ShopLoginScreen.routeName);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage('assets/images/intro_shop.png'),
+                          height: 115,
+                          width: 115,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              "Shop associate",
+                              style: TextStyle(
+                                fontSize: 36.0,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 16.0,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: FlatButton(
+                    color: Colors.teal,
+                    textColor: Colors.white,
+                    padding: EdgeInsets.all(8.0),
+                    onPressed: () {
+                      Navigator.pushNamed(context, MapScreen.routeName);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage('assets/images/intro_customer.png'),
+                          height: 115,
+                          width: 115,
+                        ),
+                        Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
-                            "Shop associate",
+                            "Customer",
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 36.0,
                               fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.w100,
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                height: 16.0,
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: FlatButton(
-                  color: Colors.teal,
-                  textColor: Colors.white,
-                  padding: EdgeInsets.all(8.0),
-                  onPressed: () {
-                    Navigator.pushNamed(context, MapScreen.routeName);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Image(
-                        image: AssetImage('assets/images/intro_customer.png'),
-                        height: 115,
-                        width: 115,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          "Customer",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 36.0,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
