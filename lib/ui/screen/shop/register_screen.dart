@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -29,8 +30,31 @@ class RegisterFormState extends State<RegisterScreen> {
   String selectedAddress = ""; // TODO start with current position
   GeoPoint selectedGeoPoint = null;
 
+  Position position = null;
+
   @override
   Widget build(BuildContext context) {
+    print("run build method");
+    Geolocator()
+        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((pos) {
+      position = pos;
+
+      Geolocator()
+          .placemarkFromCoordinates(pos.latitude, pos.longitude)
+          .then((placemark) {
+            print("placemark loaded");
+
+        if (placemark.isNotEmpty) {
+          selectedAddress =
+              "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}";
+          print(selectedAddress);
+        }
+      });
+
+      print("position loaded $pos");
+    });
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -172,7 +196,8 @@ class RegisterFormState extends State<RegisterScreen> {
 
                     Navigator.of(context).pop();
                   },
-                  initialPosition: LatLng(46.94709, 7.44944),
+                  initialPosition:
+                      LatLng(position.latitude, position.longitude),
                   useCurrentLocation: false,
                 ),
               ),
