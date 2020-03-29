@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:waitathome/core/model/login_code.dart';
 import 'package:waitathome/core/model/shop.dart';
+import 'package:waitathome/core/model/shop_identifier.dart';
 
 class ShopService {
   static const SHOPS_TABLE_NAME = "shops";
@@ -67,12 +68,12 @@ class ShopService {
         .updateData({"queue": queue});
   }
 
-  Future register(String shopName, String email, GeoPoint geoPoint) {
+  Future<ShopIdentifier> register(String shopName, String email, GeoPoint geoPoint) {
     print("register shop with name $shopName");
     var shop = Shop.create(shopName, email, geoPoint);
 
     return saveShop(shop).then((shopId) {
-      return addShopLoginCode(shopId);
+      return addShopLoginCode(shopId).then((loginCode) => ShopIdentifier(loginCode, shopId));
     });
   }
 

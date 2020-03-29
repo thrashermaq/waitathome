@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/shop_identifier.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/save_button.dart';
 import 'package:waitathome/ui/screen/shop/register_success_screen.dart';
@@ -50,12 +51,12 @@ class RegisterFormState extends State<RegisterScreen> {
                     Provider.of<ShopService>(context, listen: false);
                     shopService
                         .register(nameController.text, emailController.text, selectedGeoPoint)
-                        .then((loginCode) {
-                      print("shop saved with loginCode $loginCode");
+                        .then((ShopIdentifier shopIdentifier) {
+                      print("shop saved with loginCode ${shopIdentifier.loginCode}");
                       Navigator.pushNamed(
                         context,
                         RegisterSuccessScreen.routeName,
-                        arguments: loginCode,
+                        arguments: shopIdentifier,
                       );
                     });
                   }
