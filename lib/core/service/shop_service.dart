@@ -99,7 +99,7 @@ class ShopService {
         .setData({"shop-id": shopId}).then((ref) => generatedCode);
   }
 
-  Future<bool> existsLoginCode(int loginCode) {
+  Future<bool> existsLoginCode(String loginCode) {
     return databaseReference
         .collection(SHOP_CODES_TABLE_NAME)
         .document(loginCode.toString())

@@ -6,6 +6,7 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/save_button.dart';
+import 'package:waitathome/ui/screen/shop/register_success_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/shop/register';
@@ -49,8 +50,13 @@ class RegisterFormState extends State<RegisterScreen> {
                     Provider.of<ShopService>(context, listen: false);
                     shopService
                         .register(nameController.text, emailController.text, selectedGeoPoint)
-                        .then((shopCode) {
-                      print("shop saved with loginCode $shopCode");
+                        .then((loginCode) {
+                      print("shop saved with loginCode $loginCode");
+                      Navigator.pushNamed(
+                        context,
+                        RegisterSuccessScreen.routeName,
+                        arguments: loginCode,
+                      );
                     });
                   }
                 },
