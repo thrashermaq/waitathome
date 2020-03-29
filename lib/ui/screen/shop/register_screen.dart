@@ -27,26 +27,22 @@ class RegisterFormState extends State<RegisterScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   int shopLimit = 50;
-  String selectedAddress =
-      "Bitte wählen Sie die Adresse des Geschäfts aus";
+  String selectedAddress = "Bitte wählen Sie die Adresse des Geschäfts aus";
   GeoPoint selectedGeoPoint = null;
-
-  Position position = null;
 
   RegisterFormState() {
     Geolocator()
         .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high)
         .then((pos) {
-      setState(() => position = pos);
-
       Geolocator()
           .placemarkFromCoordinates(pos.latitude, pos.longitude)
           .then((placemark) {
-        print("placemark loaded");
-
         if (placemark.isNotEmpty) {
-          setState(() => selectedAddress =
-              "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}");
+          setState(() {
+            selectedGeoPoint = new GeoPoint(pos.latitude, pos.longitude);
+            selectedAddress =
+                "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}";
+          });
         }
       });
 
@@ -161,8 +157,7 @@ class RegisterFormState extends State<RegisterScreen> {
             child: Text(
               shopLimit.toString(),
               style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: 25.0),
+                  decoration: TextDecoration.underline, fontSize: 25.0),
             ),
             onTap: () => _showNumberPickerDialog(),
           ),
@@ -197,8 +192,7 @@ class RegisterFormState extends State<RegisterScreen> {
 
                     Navigator.of(context).pop();
                   },
-                  initialPosition:
-                      LatLng(position.latitude, position.longitude),
+                  initialPosition: initialPosition(),
                   useCurrentLocation: false,
                 ),
               ),
@@ -207,6 +201,13 @@ class RegisterFormState extends State<RegisterScreen> {
         ],
       ),
     );
+  }
+
+  LatLng initialPosition() {
+    if (selectedGeoPoint != null) {
+      return LatLng(selectedGeoPoint.latitude, selectedGeoPoint.longitude);
+    }
+    return LatLng(46.94709, 7.44944);
   }
 
   @override
