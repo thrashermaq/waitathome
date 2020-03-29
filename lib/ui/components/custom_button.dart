@@ -9,15 +9,18 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(5),
-      child: RaisedButton(
-        child: Text(
-          this.label,
-          style: TextStyle(color: Colors.white),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Padding(
+        padding: EdgeInsets.all(5),
+        child: RaisedButton(
+          child: Text(
+            this.label,
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: onPressed,
+          color: Colors.blueAccent,
         ),
-        onPressed: onPressed,
-        color: Colors.blueAccent,
       ),
     );
   }
