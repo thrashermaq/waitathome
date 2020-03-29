@@ -84,35 +84,31 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void loadMarkers() {
-    print('Load markers');
     var shopService = Provider.of<ShopService>(context, listen: false);
     shopService.loadAll((shops) => addMarkers(shops));
   }
 
   void addMarkers(List<Shop> shops) {
     shops.forEach((shop) {
-      print('Shop $shop');
       if (isValid(shop)) {
-        print('Name ${shop.name}');
-        print('addMarker ${shop.location}');
-        setState(() {
-          _markers.add(
-            Marker(
-              markerId: MarkerId(shop.id.toString()),
-              position: LatLng(
-                  shop.location.latitude ?? 0, shop.location.longitude ?? 0),
-              icon: getMarker(shop),
-              onTap: () {
-                setState(() {
-                  infoWidgetPosition = 0;
-                  selectedShop = shop;
-                });
-              },
-            ),
-          );
-        });
+        _markers.add(
+          Marker(
+            markerId: MarkerId(shop.id.toString()),
+            position: LatLng(
+                shop.location.latitude ?? 0, shop.location.longitude ?? 0),
+            icon: getMarker(shop),
+            onTap: () {
+              setState(() {
+                infoWidgetPosition = 0;
+                selectedShop = shop;
+              });
+            },
+          ),
+        );
       }
     });
+    // trigger rebuild
+    setState(() {});
   }
 
   getMarker(Shop shop) {
