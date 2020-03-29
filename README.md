@@ -6,7 +6,7 @@ For people who want to do grocery shopping it offers an easy way to check if it 
 the shops or better wait at home and wait for fewer people.
 
 ## Main Goal
-Create a save environment for both customers and employees in stores by reducing the number of people.
+Create a save environment for both customers and employees in stores by reducing the number of people in stores and eliminate huge queues in front of stores.
 
 ## Setup
 - run `flutter packages get`
