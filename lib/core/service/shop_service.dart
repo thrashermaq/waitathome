@@ -46,6 +46,7 @@ class ShopService {
   }
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {
+    print('Update store with id: $shopId with $nrOfConsumer consumers');
     databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)

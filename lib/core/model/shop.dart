@@ -9,7 +9,7 @@ GeoPoint _geopointFromJson(GeoPoint json) => json;
 
 @JsonSerializable()
 class Shop {
-  int id;
+  String id;
   String name;
   String email;
   @JsonKey(fromJson: _geopointFromJson, toJson: _geopointToJson)

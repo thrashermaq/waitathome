@@ -12,12 +12,12 @@ class CustomerTracking extends StatefulWidget {
 }
 
 class _CustomerTrackingState extends State<CustomerTracking> {
-  int customers = 0;
   int limit = 10;
   int queue = 0;
 
   var activeButton = [false, false, false];
   bool queueEnabled = false;
+  Shop shop;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,10 @@ class _CustomerTrackingState extends State<CustomerTracking> {
           }
 
           Map<String, dynamic> shopDto = snapshot.data.data;
-          shopDto.putIfAbsent('id', () => snapshot.data.documentID);
-          Shop shop = Shop.fromJson(shopDto);
+          print(snapshot.data.documentID);
+          shop = Shop.fromJson(shopDto);
+          shop.id = snapshot
+              .data.documentID; // TODO: putIfAbsent is lazy? Other solution
           return SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +51,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                   ),
                 ),
                 Text(
-                  '$customers',
+                  '${shop.customerInStore}',
                   style: TextStyle(
                     fontSize: 200,
                     fontWeight: FontWeight.bold,
@@ -101,6 +103,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                     ),
                   ),
                   onTap: () {
+                    var customers = shop.customerInStore;
                     createDialog(context).then((newLimit) {
                       if (newLimit != null) {
                         if (customers >= newLimit) {
@@ -199,10 +202,10 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void decreaseCustomerCount() {
+    var customers = shop.customerInStore;
     if (customers > 0 && queue == 0) {
-      setState(() {
-        customers = customers - 1;
-      });
+      var shopService = Provider.of<ShopService>(context, listen: false);
+      shopService.setConsumerInStore(shop.id, --customers);
     }
     if (customers < limit && queueEnabled) {
       setState(() {
@@ -212,10 +215,10 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void increaseCustomerCount() {
+    var customers = shop.customerInStore;
     if (customers < limit) {
-      setState(() {
-        customers = customers + 1;
-      });
+      var shopService = Provider.of<ShopService>(context, listen: false);
+      shopService.setConsumerInStore(shop.id, ++customers);
     }
     if (customers == limit) {
       setState(() {
