@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/components/custom_button.dart';
+import 'package:waitathome/ui/components/count_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/shop/register';
