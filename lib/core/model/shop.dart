@@ -17,13 +17,15 @@ class Shop {
   int customerInStore;
   int limit;
   int queue;
+  List<bool> activeButton;
+  bool queueEnabled;
 
   Shop(this.id, this.name, this.email, this.location, this.customerInStore,
-      this.limit, this.queue);
+      this.limit, this.queue, this.activeButton, this.queueEnabled);
 
   factory Shop.create(String name, String email) =>
       // TODO limit mit input befüllen
-      new Shop(null, name, email, null, 0, 50, 0);
+      new Shop(null, name, email, null, 0, 50, 0, [false, false, false], false);
 
   factory Shop.fromJson(Map<String, dynamic> json) => _$ShopFromJson(json);
 

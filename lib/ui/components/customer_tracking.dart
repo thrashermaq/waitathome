@@ -14,8 +14,6 @@ class CustomerTracking extends StatefulWidget {
 }
 
 class _CustomerTrackingState extends State<CustomerTracking> {
-  var activeButton = [false, false, false];
-  bool queueEnabled = false;
   Shop shop;
   ShopService shopService;
 
@@ -111,10 +109,8 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void disableQueue() {
-    setState(() {
-      queueEnabled = false;
-      activeButton = [false, false, false];
-    });
+    shopService.setQueueEnabled(shop.id, false);
+    shopService.setActiveButton(shop.id, [false, false, false]);
   }
 
   Row _buildCountButtons() {
@@ -174,9 +170,9 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   QueueButton buildQueueButton(int index, String text, int numberOfPeople) {
     return QueueButton(
       label: text,
-      active: activeButton[index],
+      active: shop.activeButton[index],
       onPressed: () {
-        if (queueEnabled) {
+        if (shop.queueEnabled) {
           setQueue(index, numberOfPeople);
         }
       },
@@ -188,10 +184,8 @@ class _CustomerTrackingState extends State<CustomerTracking> {
     if (customers > 0 && shop.queue == 0) {
       shopService.setConsumerInStore(shop.id, --customers);
     }
-    if (customers < shop.limit && queueEnabled) {
-      setState(() {
-        queueEnabled = false;
-      });
+    if (customers < shop.limit && shop.queueEnabled) {
+      disableQueue();
     }
   }
 
@@ -206,9 +200,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void enableQueue() {
-    setState(() {
-      queueEnabled = true;
-    });
+    shopService.setQueueEnabled(shop.id, true);
   }
 
   void setQueue(int index, int queueSize) {
@@ -220,15 +212,12 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   }
 
   void setActiveButton(int index) {
-    if (activeButton[index]) {
-      setState(() {
-        activeButton = [false, false, false];
-      });
+    if (shop.activeButton[index]) {
+      shopService.setActiveButton(shop.id, [false, false, false]);
     } else {
-      setState(() {
-        activeButton = [false, false, false];
-        activeButton[index] = true;
-      });
+      var newActiveButton = [false, false, false];
+      newActiveButton[index] = true;
+      shopService.setActiveButton(shop.id, newActiveButton);
     }
   }
 }

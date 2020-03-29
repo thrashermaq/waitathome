@@ -67,6 +67,20 @@ class ShopService {
         .updateData({"queue": queue});
   }
 
+  void setQueueEnabled(String shopId, bool isEnabled) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"queueEnabled": isEnabled});
+  }
+
+  void setActiveButton(String shopId, List<bool> activeButton) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"activeButton": activeButton});
+  }
+
   Future register(String shopName, String email) {
     print("register shop with name $shopName");
     var shop = Shop.create(shopName, email);
