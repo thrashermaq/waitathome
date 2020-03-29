@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/shop.dart';
+import 'package:waitathome/core/service/shop_service.dart';
 
 class CustomerTracking extends StatefulWidget {
   @override
@@ -18,93 +21,105 @@ class _CustomerTrackingState extends State<CustomerTracking> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '$storeName',
-            style: TextStyle(
-              fontSize: 44,
-            ),
-          ),
-          Text(
-            '$customers',
-            style: TextStyle(
-              fontSize: 200,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildCountButton('-', () {
-                decreaseCustomerCount();
-              }),
-              SizedBox(
-                width: 20,
-              ),
-              buildCountButton('+', () {
-                increaseCustomerCount();
-              }),
-            ],
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Warteschlange',
-            style: TextStyle(
-              fontSize: 25,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 50,
-              right: 50,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                buildQueueButton(0, 'Kurz', 1),
-                buildQueueButton(1, 'Mittel', 2),
-                buildQueueButton(2, 'Lang', 3),
-              ],
-            ),
-          ),
-          InkWell(
-            child: Text(
-              'Ladenkapazität anpassen',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 16,
-              ),
-            ),
-            onTap: () {
-              createDialog(context).then((newLimit) {
-                if (newLimit != null) {
-                  if (customers >= newLimit) {
-                    setState(() {
-                      customers = newLimit;
-                      queueEnabled = true;
-                    });
-                  } else {
-                    setState(() {
-                      queueEnabled = false;
-                      queue = 0;
-                      activeButton = [false, false, false];
-                    });
-                  }
-                  setState(() {
-                    limit = newLimit;
-                  });
-                }
-              });
-            },
-          ),
-        ],
-      ),
-    );
+    final String shopId = ModalRoute.of(context).settings.arguments;
+    print('tracking start $shopId');
+    var shopService = Provider.of<ShopService>(context, listen: false);
+    var shopStream = shopService.getShop(shopId);
+
+    return StreamBuilder<Shop>(
+        stream: shopStream,
+        builder: (context, snapshot) {
+          Shop shop = snapshot.data;
+          return snapshot.hasData
+              ? SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '${shop.name}',
+                        style: TextStyle(
+                          fontSize: 44,
+                        ),
+                      ),
+                      Text(
+                        '$customers',
+                        style: TextStyle(
+                          fontSize: 200,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          buildCountButton('-', () {
+                            decreaseCustomerCount();
+                          }),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          buildCountButton('+', () {
+                            increaseCustomerCount();
+                          }),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'Warteschlange',
+                        style: TextStyle(
+                          fontSize: 25,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 50,
+                          right: 50,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            buildQueueButton(0, 'Kurz', 1),
+                            buildQueueButton(1, 'Mittel', 2),
+                            buildQueueButton(2, 'Lang', 3),
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        child: Text(
+                          'Ladenkapazität anpassen',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onTap: () {
+                          createDialog(context).then((newLimit) {
+                            if (newLimit != null) {
+                              if (customers >= newLimit) {
+                                setState(() {
+                                  customers = newLimit;
+                                  queueEnabled = true;
+                                });
+                              } else {
+                                setState(() {
+                                  queueEnabled = false;
+                                  queue = 0;
+                                  activeButton = [false, false, false];
+                                });
+                              }
+                              setState(() {
+                                limit = newLimit;
+                              });
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              : Text('loading');
+        });
   }
 
   Future<int> createDialog(BuildContext context) {

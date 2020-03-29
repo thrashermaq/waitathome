@@ -15,12 +15,17 @@ class Shop {
   @JsonKey(fromJson: _geopointFromJson, toJson: _geopointToJson)
   GeoPoint location;
   int customerInStore;
+  int limit;
+  int queue;
 
-  Shop(this.id, this.name, this.email, this.location, this.customerInStore);
+  Shop(this.id, this.name, this.email, this.location, this.customerInStore,
+      this.limit, this.queue);
 
   factory Shop.create(String name, String email) =>
-      new Shop(null, name, email, null, 0);
+      // TODO limit mit input befüllen
+      new Shop(null, name, email, null, 0, 50, 0);
 
   factory Shop.fromJson(Map<String, dynamic> json) => _$ShopFromJson(json);
+
   Map<String, dynamic> toJson() => _$ShopToJson(this);
 }

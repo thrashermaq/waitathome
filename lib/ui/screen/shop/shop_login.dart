@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
+import 'package:waitathome/ui/screen/shop/shop_screen.dart';
 
 class ShopLoginScreen extends StatelessWidget {
   static const routeName = '/shopLogin';
@@ -46,9 +47,14 @@ class ShopLoginScreen extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   onCompleted: (value) {
                     print(value);
-                    Provider.of<ShopService>(context, listen: false).login(value, (shopId) {
-                      // TODO go to expected page
+                    Provider.of<ShopService>(context, listen: false)
+                        .login(value, (shopId) {
                       print('logged in with $shopId');
+                      Navigator.pushNamed(
+                        context,
+                        ShopScreen.routeName,
+                        arguments: shopId,
+                      );
                     }, () {
                       // TODO error handling
                       print('login failed');
