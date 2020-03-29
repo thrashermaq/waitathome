@@ -84,7 +84,9 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Shop> shops) {
-    shops.forEach((shop) => _markers.add(
+    shops.forEach((shop) {
+      if (isValid(shop)) {
+        _markers.add(
           Marker(
             markerId: MarkerId(shop.id.toString()),
             position: LatLng(
@@ -97,8 +99,9 @@ class _MapScreenState extends State<MapScreen> {
               });
             },
           ),
-        ));
-
+        );
+      }
+    });
     // trigger rebuild
     setState(() {});
   }
@@ -121,5 +124,9 @@ class _MapScreenState extends State<MapScreen> {
         config, 'assets/images/marker_orange.png');
     redMarker = await BitmapDescriptor.fromAssetImage(
         config, 'assets/images/marker_red.png');
+  }
+
+  bool isValid(Shop shop) {
+    return shop.location != null;
   }
 }
