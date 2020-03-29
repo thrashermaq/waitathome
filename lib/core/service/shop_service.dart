@@ -38,16 +38,11 @@ class ShopService {
     });
   }
 
-  Stream<Shop> getShop(String id) {
+  getShop(String id) {
     return databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(id)
-        .snapshots()
-        .map((DocumentSnapshot documentSnapshot) {
-      Map<String, dynamic> shopDto = documentSnapshot.data;
-      shopDto.putIfAbsent('id', () => documentSnapshot.documentID);
-      return Shop.fromJson(shopDto);
-    });
+        .snapshots();
   }
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {

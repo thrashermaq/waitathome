@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -14,7 +15,6 @@ class _CustomerTrackingState extends State<CustomerTracking> {
   int customers = 0;
   int limit = 10;
   int queue = 0;
-  String storeName = 'Coop Europaplatz';
 
   var activeButton = [false, false, false];
   bool queueEnabled = false;
@@ -26,99 +26,105 @@ class _CustomerTrackingState extends State<CustomerTracking> {
     var shopService = Provider.of<ShopService>(context, listen: false);
     var shopStream = shopService.getShop(shopId);
 
-    return StreamBuilder<Shop>(
+    return StreamBuilder(
         stream: shopStream,
-        builder: (context, snapshot) {
-          Shop shop = snapshot.data;
-          return snapshot.hasData
-              ? SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text('Loading'),
+            );
+          }
+
+          Map<String, dynamic> shopDto = snapshot.data.data;
+          shopDto.putIfAbsent('id', () => snapshot.data.documentID);
+          Shop shop = Shop.fromJson(shopDto);
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '${shop.name}',
+                  style: TextStyle(
+                    fontSize: 44,
+                  ),
+                ),
+                Text(
+                  '$customers',
+                  style: TextStyle(
+                    fontSize: 200,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    buildCountButton('-', () {
+                      decreaseCustomerCount();
+                    }),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    buildCountButton('+', () {
+                      increaseCustomerCount();
+                    }),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Warteschlange',
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 50,
+                    right: 50,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text(
-                        '${shop.name}',
-                        style: TextStyle(
-                          fontSize: 44,
-                        ),
-                      ),
-                      Text(
-                        '$customers',
-                        style: TextStyle(
-                          fontSize: 200,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          buildCountButton('-', () {
-                            decreaseCustomerCount();
-                          }),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          buildCountButton('+', () {
-                            increaseCustomerCount();
-                          }),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        'Warteschlange',
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 50,
-                          right: 50,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            buildQueueButton(0, 'Kurz', 1),
-                            buildQueueButton(1, 'Mittel', 2),
-                            buildQueueButton(2, 'Lang', 3),
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        child: Text(
-                          'Ladenkapazität anpassen',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 16,
-                          ),
-                        ),
-                        onTap: () {
-                          createDialog(context).then((newLimit) {
-                            if (newLimit != null) {
-                              if (customers >= newLimit) {
-                                setState(() {
-                                  customers = newLimit;
-                                  queueEnabled = true;
-                                });
-                              } else {
-                                setState(() {
-                                  queueEnabled = false;
-                                  queue = 0;
-                                  activeButton = [false, false, false];
-                                });
-                              }
-                              setState(() {
-                                limit = newLimit;
-                              });
-                            }
-                          });
-                        },
-                      ),
+                      buildQueueButton(0, 'Kurz', 1),
+                      buildQueueButton(1, 'Mittel', 2),
+                      buildQueueButton(2, 'Lang', 3),
                     ],
                   ),
-                )
-              : Text('loading');
+                ),
+                InkWell(
+                  child: Text(
+                    'Ladenkapazität anpassen',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                    ),
+                  ),
+                  onTap: () {
+                    createDialog(context).then((newLimit) {
+                      if (newLimit != null) {
+                        if (customers >= newLimit) {
+                          setState(() {
+                            customers = newLimit;
+                            queueEnabled = true;
+                          });
+                        } else {
+                          setState(() {
+                            queueEnabled = false;
+                            queue = 0;
+                            activeButton = [false, false, false];
+                          });
+                        }
+                        setState(() {
+                          limit = newLimit;
+                        });
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
         });
   }
 
