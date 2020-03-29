@@ -17,8 +17,10 @@ class ShopService {
         .collection(SHOPS_TABLE_NAME)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
-      List<Shop> shops =
-          snapshot.documents.map((f) => Shop.fromJson(f.data)).toList();
+      List<Shop> shops = snapshot.documents.map((document) {
+        var shop = Shop.fromJson(document.data);
+        shop.id = document.documentID;
+      }).toList();
       onLoaded(shops);
     });
   }

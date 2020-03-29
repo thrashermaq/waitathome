@@ -21,6 +21,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.8.0
   json_serializable: ^3.3.0
+  permission_handler: ^5.0.0
 
 flutter:
   uses-material-design: true

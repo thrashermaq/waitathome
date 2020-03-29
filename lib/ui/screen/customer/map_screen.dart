@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
@@ -41,14 +42,25 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Permission.location.request().then((onValue) => print(onValue));
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.my_location,
+          color: Colors.grey[600],
+        ),
+        backgroundColor: Colors.white,
+        onPressed: () {},
+      ),
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(),
-          InfoWidget(
-            position: infoWidgetPosition,
-            shop: selectedShop,
-          ),
+          (selectedShop != null)
+              ? InfoWidget(
+                  position: infoWidgetPosition,
+                  shopId: selectedShop.id,
+                )
+              : Container(),
         ],
       ),
     );
@@ -127,6 +139,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   bool isValid(Shop shop) {
-    return shop.location != null;
+    return shop != null && shop.location != null;
   }
 }
