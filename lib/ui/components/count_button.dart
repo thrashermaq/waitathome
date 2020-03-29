@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// TODO: Remove. Just for showcase.
 class CountButton extends StatelessWidget {
   CountButton({this.label, this.onPressed});
 

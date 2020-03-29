@@ -15,6 +15,7 @@ dependencies:
   provider: ^4.0.4
   google_maps_flutter: ^0.5.11
   pin_code_text_field: ^1.5.1
+  google_maps_place_picker: ^0.9.0
 
 dev_dependencies:
   flutter_test:
@@ -31,3 +32,5 @@ flutter:
     - assets/images/marker_red.png
     - assets/images/intro_customer.png
     - assets/images/intro_shop.png
+    - assets/images/register_image.png
+    - assets/images/register_success.png

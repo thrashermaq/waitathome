@@ -4,6 +4,7 @@ import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/screen/customer/map_screen.dart';
 import 'package:waitathome/ui/screen/intro_screen.dart';
 import 'package:waitathome/ui/screen/shop/register_screen.dart';
+import 'package:waitathome/ui/screen/shop/register_success_screen.dart';
 import 'package:waitathome/ui/screen/shop/shop_login.dart';
 import 'package:waitathome/ui/screen/shop/shop_screen.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
           ShopScreen.routeName: (context) => ShopScreen(),
           ShopLoginScreen.routeName: (context) => ShopLoginScreen(),
           RegisterScreen.routeName: (context) => RegisterScreen(),
+          RegisterSuccessScreen.routeName: (context) => RegisterSuccessScreen(),
           MapScreen.routeName: (context) => MapScreen(),
         },
       ),
