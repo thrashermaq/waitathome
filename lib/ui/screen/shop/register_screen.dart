@@ -27,34 +27,35 @@ class RegisterFormState extends State<RegisterScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   int shopLimit = 50;
-  String selectedAddress = ""; // TODO start with current position
+  String selectedAddress =
+      "Bitte wählen Sie die Adresse des Geschäfts aus";
   GeoPoint selectedGeoPoint = null;
 
   Position position = null;
 
-  @override
-  Widget build(BuildContext context) {
-    print("run build method");
+  RegisterFormState() {
     Geolocator()
         .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high)
         .then((pos) {
-      position = pos;
+      setState(() => position = pos);
 
       Geolocator()
           .placemarkFromCoordinates(pos.latitude, pos.longitude)
           .then((placemark) {
-            print("placemark loaded");
+        print("placemark loaded");
 
         if (placemark.isNotEmpty) {
-          selectedAddress =
-              "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}";
-          print(selectedAddress);
+          setState(() => selectedAddress =
+              "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}");
         }
       });
 
       print("position loaded $pos");
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -155,17 +156,17 @@ class RegisterFormState extends State<RegisterScreen> {
       leading: const Icon(Icons.av_timer), // shopping_cart
       title: Row(
         children: <Widget>[
-          Text("Max. "),
+          Text('Max.  '),
           GestureDetector(
             child: Text(
               shopLimit.toString(),
               style: TextStyle(
-                decoration: TextDecoration.underline,
-              ),
+                  decoration: TextDecoration.underline,
+                  fontSize: 25.0),
             ),
             onTap: () => _showNumberPickerDialog(),
           ),
-          Text(" Kunden im Laden erlaubt")
+          Text('  Kunden im Laden erlaubt')
         ],
       ),
     );
