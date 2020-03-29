@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop.dart';
+import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/info_widget.dart';
 
 const double CAMERA_ZOOM = 15;
@@ -75,35 +75,31 @@ class _MapScreenState extends State<MapScreen> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.setMapStyle(_mapStyle);
-    setState(() {
-      loadMarkers();
-    });
+    loadMarkers();
   }
 
   void loadMarkers() {
-    // TODO: Get shops from firebase
-    List<Shop> shops = new List();
-    shops.add(Shop(1, 'Coop Bern', null, 46.94709, 7.44944, 10));
-    shops.add(Shop(2, 'Migros Aare', null, 46.94850, 7.44784, 20));
-    shops.add(Shop(3, 'Denner', null, 46.94971, 7.44700, 40));
-    shops.add(Shop(4, 'Gemüseladen', null, 46.94809, 7.44602, 50));
+    var shopService = Provider.of<ShopService>(context, listen: false);
+    shopService.loadAll((shops) => addMarkers(shops));
+  }
 
-    shops.forEach((shop) {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(shop.id.toString()),
-          position: LatLng(shop.lat, shop.long),
-          icon: getMarker(shop),
-          onTap: () {
-            setState(() {
-              infoWidgetPosition = 0;
-              selectedShop = shop;
-              log(shop.toString());
-            });
-          },
-        ),
-      );
-    });
+  void addMarkers(List<Shop> shops) {
+    print(shops);
+    shops.forEach((shop) => _markers.add(
+          Marker(
+            markerId: MarkerId(shop.id.toString()),
+            position: LatLng(
+                shop.location.latitude ?? 0, shop.location.longitude ?? 0),
+            icon: getMarker(shop),
+            onTap: () {
+              setState(() {
+                infoWidgetPosition = 0;
+                selectedShop = shop;
+              });
+            },
+          ),
+        ));
+    setState(() {});
   }
 
   getMarker(Shop shop) {

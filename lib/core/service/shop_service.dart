@@ -12,12 +12,15 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  loadAll(void onLoaded(List<Shop> shops))  {
+  loadAll(void onLoaded(List<Shop> shops)) {
     databaseReference
         .collection(SHOPS_TABLE_NAME)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
-      List<Shop> shops = snapshot.documents.map((f) => Shop.fromJson(f.data)).toList();
+      List<Shop> shops = snapshot.documents.map((f) {
+        print(f.data);
+        return Shop.fromJson(f.data);
+      }).toList();
       onLoaded(shops);
     });
   }
