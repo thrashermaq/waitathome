@@ -27,14 +27,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String _pin;
 
-  bool hasError = false;
-  TextEditingController controller = TextEditingController(text: "");
+  bool _pinError = false;
+  TextEditingController _controller = TextEditingController(text: "");
 
   @override
   void initState() {
-    _pin = null;
     super.initState();
   }
 
@@ -57,22 +55,52 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.only(top: 48.0, bottom: 48.0),
           child: PinCodeTextField(
             autofocus: true,
-            controller: controller,
+            controller: _controller,
             highlight: true,
             highlightColor: Colors.blue,
             defaultBorderColor: Colors.black,
             hasTextBorderColor: Colors.green,
             maxLength: 6,
-            hasError: hasError,
+            hasError: _pinError,
             onTextChanged: (text) {
               setState(() {
-                hasError = false;
+                _pinError = false;
               });
             },
             onDone: (text) {
-              setState(() {
-                _pin = text;
+
+
+              Provider.of<ShopService>(context, listen: false).login(text, (shopId) {
+                setState(() {
+                  _controller.text = '';
+                });
+                Navigator.pushNamed(context, ShopScreen.routeName);
+              }, () {
+                setState(() {
+                  _controller.text = '';
+                  _pinError = true;
+                });
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    // return object of type Dialog
+                    return AlertDialog(
+                      title: new Text("Login failed"),
+                      content: new Text("Check if the entered pin is correct."),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        new FlatButton(
+                          child: new Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               });
+              
             },
             wrapAlignment: WrapAlignment.spaceAround,
             pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
@@ -84,14 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
             pinBoxHeight: 40,
           ),
         ),
-        FlatButton(
-          child: Text(
-            'Login',
-          ),
-          color: Colors.teal,
-          disabledColor: Colors.grey,
-          onPressed: onPressed(),
-        ),
         GestureDetector(
           child: Text("Register", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue)),
           onTap: () {
@@ -100,46 +120,5 @@ class _LoginScreenState extends State<LoginScreen> {
         )
       ],
     );
-  }
-
-  Function onPressed() {
-    if (_pin == null) {
-      return null;
-    }
-    var loginPin = _pin;
-    return () {
-      Provider.of<ShopService>(context, listen: false).login(loginPin, (shopId) {
-        setState(() {
-          controller.text = '';
-          _pin = null;
-        });
-        Navigator.pushNamed(context, ShopScreen.routeName);
-      }, () {
-        setState(() {
-          controller.text = '';
-          _pin = null;
-          hasError = true;
-        });
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            // return object of type Dialog
-            return AlertDialog(
-              title: new Text("Login failed"),
-              content: new Text("Check if the entered pin is correct."),
-              actions: <Widget>[
-                // usually buttons at the bottom of the dialog
-                new FlatButton(
-                  child: new Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      });
-    };
   }
 }
