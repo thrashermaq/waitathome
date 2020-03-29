@@ -18,87 +18,92 @@ class _CustomerTrackingState extends State<CustomerTracking> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          '$storeName',
-          style: TextStyle(
-            fontSize: 44,
-          ),
-        ),
-        Text(
-          '$customers',
-          style: TextStyle(
-            fontSize: 200,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            buildCountButton('-', () {
-              decreaseCustomerCount();
-            }),
-            SizedBox(
-              width: 20,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '$storeName',
+            style: TextStyle(
+              fontSize: 44,
             ),
-            buildCountButton('+', () {
-              increaseCustomerCount();
-            }),
-          ],
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        Text(
-          'Warteschlange',
-          style: TextStyle(
-            fontSize: 25,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 50,
-            right: 50,
+          Text(
+            '$customers',
+            style: TextStyle(
+              fontSize: 200,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              buildQueueButton(0, 'Kurz', 5),
-              buildQueueButton(1, 'Mittel', 10),
-              buildQueueButton(2, 'Lang', 15),
+              buildCountButton('-', () {
+                decreaseCustomerCount();
+              }),
+              SizedBox(
+                width: 20,
+              ),
+              buildCountButton('+', () {
+                increaseCustomerCount();
+              }),
             ],
           ),
-        ),
-        InkWell(
-          child: Text(
-            'Ladenkapazität anpassen',
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            'Warteschlange',
             style: TextStyle(
-              color: Colors.blue,
-              fontSize: 16,
+              fontSize: 25,
             ),
           ),
-          onTap: () {
-            createDialog(context).then((newLimit) {
-              if (customers > newLimit) {
-                setState(() {
-                  customers = newLimit;
-                  queueEnabled = true;
-                });
-              } else {
-                setState(() {
-                  queueEnabled = false;
-                  activeButton = [false, false, false];
-                });
-              }
-              setState(() {
-                limit = newLimit;
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 50,
+              right: 50,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                buildQueueButton(0, 'Kurz', 1),
+                buildQueueButton(1, 'Mittel', 2),
+                buildQueueButton(2, 'Lang', 3),
+              ],
+            ),
+          ),
+          InkWell(
+            child: Text(
+              'Ladenkapazität anpassen',
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 16,
+              ),
+            ),
+            onTap: () {
+              createDialog(context).then((newLimit) {
+                if (newLimit != null) {
+                  if (customers >= newLimit) {
+                    setState(() {
+                      customers = newLimit;
+                      queueEnabled = true;
+                    });
+                  } else {
+                    setState(() {
+                      queueEnabled = false;
+                      queue = 0;
+                      activeButton = [false, false, false];
+                    });
+                  }
+                  setState(() {
+                    limit = newLimit;
+                  });
+                }
               });
-            });
-          },
-        ),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -125,7 +130,8 @@ class _CustomerTrackingState extends State<CustomerTracking> {
               MaterialButton(
                 child: Text('Speichern'),
                 onPressed: () {
-                  final newLimit = int.parse(customController.text.toString());
+                  var value = customController.text.toString();
+                  final newLimit = value != '' ? int.parse(value) : limit;
                   Navigator.of(context).pop(newLimit);
                 },
               ),
