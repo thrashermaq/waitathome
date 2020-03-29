@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/screen/shop/register_screen.dart';
@@ -29,6 +29,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String _pin;
 
+  bool hasError = false;
+  TextEditingController controller = TextEditingController(text: "");
+
   @override
   void initState() {
     _pin = null;
@@ -53,24 +56,32 @@ class _LoginScreenState extends State<LoginScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 48.0, bottom: 48.0),
           child: PinCodeTextField(
-            length: 6,
-            obsecureText: false,
-            animationType: AnimationType.fade,
-            shape: PinCodeFieldShape.box,
-            animationDuration: Duration(milliseconds: 150),
-            borderRadius: BorderRadius.circular(6),
-            fieldHeight: 50,
-            textStyle: TextStyle(
-              fontSize: 32.0,
-              fontStyle: FontStyle.normal,
-            ),
-            backgroundColor: Colors.transparent,
-            onCompleted: (value) {
+            autofocus: true,
+            controller: controller,
+            highlight: true,
+            highlightColor: Colors.blue,
+            defaultBorderColor: Colors.black,
+            hasTextBorderColor: Colors.green,
+            maxLength: 6,
+            hasError: hasError,
+            onTextChanged: (text) {
               setState(() {
-                _pin = value;
+                hasError = false;
               });
             },
-            onChanged: (value) {},
+            onDone: (text) {
+              setState(() {
+                _pin = text;
+              });
+            },
+            wrapAlignment: WrapAlignment.spaceAround,
+            pinBoxDecoration: ProvidedPinBoxDecoration.defaultPinBoxDecoration,
+            pinTextStyle: TextStyle(fontSize: 16.0),
+            highlightAnimationBeginColor: Colors.black,
+            highlightAnimationEndColor: Colors.white12,
+            keyboardType: TextInputType.number,
+            pinBoxWidth: 40,
+            pinBoxHeight: 40,
           ),
         ),
         FlatButton(
@@ -95,12 +106,19 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_pin == null) {
       return null;
     }
+    var loginPin = _pin;
     return () {
-      Provider.of<ShopService>(context, listen: false).login(_pin, (shopId) {
+      Provider.of<ShopService>(context, listen: false).login(loginPin, (shopId) {
+        setState(() {
+          controller.text = '';
+          _pin = null;
+        });
         Navigator.pushNamed(context, ShopScreen.routeName);
       }, () {
         setState(() {
+          controller.text = '';
           _pin = null;
+          hasError = true;
         });
         showDialog(
           context: context,
