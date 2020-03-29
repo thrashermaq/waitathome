@@ -68,9 +68,9 @@ class ShopService {
         .updateData({"queue": queue});
   }
 
-  Future<ShopIdentifier> register(String shopName, String email, GeoPoint geoPoint) {
+  Future<ShopIdentifier> register(String shopName, String email, GeoPoint geoPoint, int shopLimit) {
     print("register shop with name $shopName");
-    var shop = Shop.create(shopName, email, geoPoint);
+    var shop = Shop.create(shopName, email, geoPoint, shopLimit);
 
     return saveShop(shop).then((shopId) {
       return addShopLoginCode(shopId).then((loginCode) => ShopIdentifier(loginCode, shopId));

@@ -21,9 +21,8 @@ class Shop {
   Shop(this.id, this.name, this.email, this.location, this.customerInStore,
       this.limit, this.queue);
 
-  factory Shop.create(String name, String email, GeoPoint geoPoint) =>
-      // TODO limit mit input befüllen
-      new Shop(null, name, email, geoPoint, 0, 50, 0);
+  factory Shop.create(String name, String email, GeoPoint geoPoint, int shopLimit) =>
+      new Shop(null, name, email, geoPoint, 0, shopLimit, 0);
 
   factory Shop.fromJson(Map<String, dynamic> json) => _$ShopFromJson(json);
 

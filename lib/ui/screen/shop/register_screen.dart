@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop_identifier.dart';
 import 'package:waitathome/core/service/shop_service.dart';
@@ -24,6 +25,7 @@ class RegisterFormState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
+  int shopLimit = 50;
   String selectedAddress = ""; // TODO start with current position
   GeoPoint selectedGeoPoint = null;
 
@@ -40,22 +42,28 @@ class RegisterFormState extends State<RegisterScreen> {
                 height: 225,
                 width: 225,
               ),
-              nameColumn(),
-              emailColumn(),
+              _buildNameColumn(),
+              _buildEmailColumn(),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0),
-                child: positionColumn(context),
+                child: _buildLimitColumn(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: _buildPositionColumn(context),
               ),
               new SaveButton(
                 label: "Speichern",
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     var shopService =
-                    Provider.of<ShopService>(context, listen: false);
+                        Provider.of<ShopService>(context, listen: false);
                     shopService
-                        .register(nameController.text, emailController.text, selectedGeoPoint)
+                        .register(nameController.text, emailController.text,
+                            selectedGeoPoint, shopLimit)
                         .then((ShopIdentifier shopIdentifier) {
-                      print("shop saved with loginCode ${shopIdentifier.loginCode}");
+                      print(
+                          "shop saved with loginCode ${shopIdentifier.loginCode}");
                       Navigator.pushNamed(
                         context,
                         RegisterSuccessScreen.routeName,
@@ -72,7 +80,23 @@ class RegisterFormState extends State<RegisterScreen> {
     );
   }
 
-  ListTile emailColumn() {
+  void _showNumberPickerDialog() {
+    showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return new NumberPickerDialog.integer(
+              minValue: 1,
+              maxValue: 1000,
+              title: new Text("Pick a new price"),
+              initialIntegerValue: shopLimit);
+        }).then((int value) {
+      if (value != null) {
+        setState(() => shopLimit = value);
+      }
+    });
+  }
+
+  ListTile _buildEmailColumn() {
     return new ListTile(
       leading: const Icon(Icons.email), // shopping_cart
       title: new TextFormField(
@@ -84,7 +108,7 @@ class RegisterFormState extends State<RegisterScreen> {
     );
   }
 
-  ListTile nameColumn() {
+  ListTile _buildNameColumn() {
     return new ListTile(
       leading: const Icon(Icons.account_circle), // shopping_cart
       title: new TextFormField(
@@ -102,7 +126,28 @@ class RegisterFormState extends State<RegisterScreen> {
     );
   }
 
-  ListTile positionColumn(BuildContext context) {
+  ListTile _buildLimitColumn() {
+    return new ListTile(
+      leading: const Icon(Icons.av_timer), // shopping_cart
+      title: Row(
+        children: <Widget>[
+          Text("Max. "),
+          GestureDetector(
+            child: Text(
+              shopLimit.toString(),
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+              ),
+            ),
+            onTap: () => _showNumberPickerDialog(),
+          ),
+          Text(" Kunden im Laden erlaubt")
+        ],
+      ),
+    );
+  }
+
+  ListTile _buildPositionColumn(BuildContext context) {
     return new ListTile(
       leading: const Icon(Icons.location_on), // shopping_cart
       title: Row(
