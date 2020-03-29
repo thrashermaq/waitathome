@@ -93,7 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: onPressed(),
         ),
         GestureDetector(
-          child: Text("Register", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue)),
+          child: Text("Register",
+              style: TextStyle(
+                  decoration: TextDecoration.underline, color: Colors.blue)),
           onTap: () {
             Navigator.pushNamed(context, RegisterScreen.routeName);
           },
@@ -108,12 +110,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     var loginPin = _pin;
     return () {
-      Provider.of<ShopService>(context, listen: false).login(loginPin, (shopId) {
+      Provider.of<ShopService>(context, listen: false).login(loginPin,
+          (shopId) {
         setState(() {
           controller.text = '';
           _pin = null;
         });
-        Navigator.pushNamed(context, ShopScreen.routeName);
+        Navigator.pushNamed(
+          context,
+          ShopScreen.routeName,
+          arguments: shopId,
+        );
       }, () {
         setState(() {
           controller.text = '';
