@@ -93,7 +93,7 @@ class _InfoWidgetState extends State<InfoWidget> {
                 ),
               ),
               Text(
-                _getQueueText(shop.queue),
+                'Schlange: ${shop.queue}',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -145,22 +145,5 @@ class _InfoWidgetState extends State<InfoWidget> {
       return Colors.orange;
     }
     return Colors.red;
-  }
-
-  String _getQueueText(int queue) {
-    if (queue == null) {
-      return 'Aktuell keine Personen am anstehen';
-    }
-
-    switch (queue) {
-      case 0:
-        return 'Kleine Schlange';
-      case 1:
-        return 'Mittlere Schlange';
-      case 2:
-        return 'Grosse Schlange';
-      default:
-        return 'Unbekannt';
-    }
   }
 }
