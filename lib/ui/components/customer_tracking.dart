@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/queue_types.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/capacity_dialog.dart';
 import 'package:waitathome/ui/components/count_button.dart';
 import 'package:waitathome/ui/components/queue_button.dart';
-import 'package:waitathome/ui/components/queue_types.dart';
 
 class CustomerTracking extends StatefulWidget {
   @override
