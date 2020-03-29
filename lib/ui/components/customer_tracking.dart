@@ -14,18 +14,16 @@ class CustomerTracking extends StatefulWidget {
 }
 
 class _CustomerTrackingState extends State<CustomerTracking> {
-  int limit = 10;
-  int queue = 0;
-
   var activeButton = [false, false, false];
   bool queueEnabled = false;
   Shop shop;
+  ShopService shopService;
 
   @override
   Widget build(BuildContext context) {
     final String shopId = ModalRoute.of(context).settings.arguments;
     print('tracking start $shopId');
-    var shopService = Provider.of<ShopService>(context, listen: false);
+    shopService = Provider.of<ShopService>(context, listen: false);
     var shopStream = shopService.getShop(shopId);
 
     return StreamBuilder(
@@ -33,7 +31,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
-              child: Text('Loading'),
+              child: LinearProgressIndicator(),
             );
           }
 
@@ -95,20 +93,13 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                     createDialog(context).then((newLimit) {
                       if (newLimit != null) {
                         if (customers >= newLimit) {
-                          setState(() {
-                            customers = newLimit;
-                            queueEnabled = true;
-                          });
+                          enableQueue();
+                          shopService.setConsumerInStore(shop.id, newLimit);
                         } else {
-                          setState(() {
-                            queueEnabled = false;
-                            queue = 0;
-                            activeButton = [false, false, false];
-                          });
+                          disableQueue();
+                          shopService.setQueue(shop.id, 0);
                         }
-                        setState(() {
-                          limit = newLimit;
-                        });
+                        shopService.setLimit(shop.id, newLimit);
                       }
                     });
                   },
@@ -117,6 +108,13 @@ class _CustomerTrackingState extends State<CustomerTracking> {
             ),
           );
         });
+  }
+
+  void disableQueue() {
+    setState(() {
+      queueEnabled = false;
+      activeButton = [false, false, false];
+    });
   }
 
   Row _buildCountButtons() {
@@ -142,7 +140,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
 
   Future<int> createDialog(BuildContext context) {
     TextEditingController customController =
-        TextEditingController(text: limit.toString());
+        TextEditingController(text: shop.limit.toString());
 
     return showDialog(
         context: context,
@@ -164,7 +162,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                 child: Text('Speichern'),
                 onPressed: () {
                   var value = customController.text.toString();
-                  final newLimit = value != '' ? int.parse(value) : limit;
+                  final newLimit = value != '' ? int.parse(value) : shop.limit;
                   Navigator.of(context).pop(newLimit);
                 },
               ),
@@ -179,8 +177,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
       active: activeButton[index],
       onPressed: () {
         if (queueEnabled) {
-          setQueue(numberOfPeople);
-          setActiveButton(index);
+          setQueue(index, numberOfPeople);
         }
       },
     );
@@ -188,11 +185,10 @@ class _CustomerTrackingState extends State<CustomerTracking> {
 
   void decreaseCustomerCount() {
     var customers = shop.customerInStore;
-    if (customers > 0 && queue == 0) {
-      var shopService = Provider.of<ShopService>(context, listen: false);
+    if (customers > 0 && shop.queue == 0) {
       shopService.setConsumerInStore(shop.id, --customers);
     }
-    if (customers < limit && queueEnabled) {
+    if (customers < shop.limit && queueEnabled) {
       setState(() {
         queueEnabled = false;
       });
@@ -201,24 +197,26 @@ class _CustomerTrackingState extends State<CustomerTracking> {
 
   void increaseCustomerCount() {
     var customers = shop.customerInStore;
-    if (customers < limit) {
-      var shopService = Provider.of<ShopService>(context, listen: false);
+    if (customers < shop.limit) {
       shopService.setConsumerInStore(shop.id, ++customers);
     }
-    if (customers == limit) {
-      setState(() {
-        queueEnabled = true;
-      });
+    if (customers == shop.limit) {
+      enableQueue();
     }
   }
 
-  void setQueue(int queueSize) {
-    if (queue == queueSize) {
+  void enableQueue() {
+    setState(() {
+      queueEnabled = true;
+    });
+  }
+
+  void setQueue(int index, int queueSize) {
+    if (shop.queue == queueSize) {
       queueSize = 0;
     }
-    setState(() {
-      queue = queueSize;
-    });
+    shopService.setQueue(shop.id, queueSize);
+    setActiveButton(index);
   }
 
   void setActiveButton(int index) {
