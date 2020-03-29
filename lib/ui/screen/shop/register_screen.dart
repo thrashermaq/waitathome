@@ -149,7 +149,7 @@ class RegisterFormState extends State<RegisterScreen> {
 
   ListTile _buildLimitColumn() {
     return new ListTile(
-      leading: const Icon(Icons.av_timer), // shopping_cart
+      leading: const Icon(Icons.people), // shopping_cart
       title: Row(
         children: <Widget>[
           Text('Max.  '),
