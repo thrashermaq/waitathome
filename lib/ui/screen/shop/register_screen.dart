@@ -49,8 +49,8 @@ class RegisterFormState extends State<RegisterScreen> {
                         Provider.of<ShopService>(context, listen: false);
                     shopService
                         .register(nameController.text, emailController.text)
-                        .then((shopId) {
-                      print("shop saved with id $shopId");
+                        .then((shopCode) {
+                      print("shop saved with loginCode $shopCode");
                     });
                   }
                 },
