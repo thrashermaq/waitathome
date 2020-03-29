@@ -42,7 +42,10 @@ class RegisterFormState extends State<RegisterScreen> {
               ),
               nameColumn(),
               emailColumn(),
-              positionColumn(context),
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: positionColumn(context),
+              ),
               new SaveButton(
                 label: "Speichern",
                 onPressed: () {
