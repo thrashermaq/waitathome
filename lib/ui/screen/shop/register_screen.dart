@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/components/count_button.dart';
+import 'package:waitathome/ui/components/save_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/shop/register';
@@ -41,14 +41,14 @@ class RegisterFormState extends State<RegisterScreen> {
               nameColumn(),
               emailColumn(),
               positionColumn(context),
-              new CountButton(
+              new SaveButton(
                 label: "Speichern",
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     var shopService =
                     Provider.of<ShopService>(context, listen: false);
                     shopService
-                        .register(nameController.text, emailController.text)
+                        .register(nameController.text, emailController.text, selectedGeoPoint)
                         .then((shopCode) {
                       print("shop saved with loginCode $shopCode");
                     });
@@ -111,11 +111,6 @@ class RegisterFormState extends State<RegisterScreen> {
                   // Put YOUR OWN KEY here.
                   onPlacePicked: (result) {
                     var selectedLocation = result.geometry.location;
-                    print("place picked ${selectedLocation}");
-                    print("place picked ${result.formattedAddress}");
-                    print("place picked ${result.adrAddress}");
-                    print("place picked ${result.icon}");
-                    print("place picked ${result.name}");
                     this.selectedAddress = result.formattedAddress;
                     this.selectedGeoPoint =
                         GeoPoint(selectedLocation.lat, selectedLocation.lng);
