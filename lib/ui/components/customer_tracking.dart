@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
+import 'package:waitathome/ui/components/count_button.dart';
+import 'package:waitathome/ui/components/queue_button.dart';
 
 class CustomerTracking extends StatefulWidget {
   @override
@@ -36,10 +38,9 @@ class _CustomerTrackingState extends State<CustomerTracking> {
           }
 
           Map<String, dynamic> shopDto = snapshot.data.data;
-          print(snapshot.data.documentID);
           shop = Shop.fromJson(shopDto);
-          shop.id = snapshot
-              .data.documentID; // TODO: putIfAbsent is lazy? Other solution
+          // TODO: putIfAbsent is lazy? Other solution
+          shop.id = snapshot.data.documentID;
           return SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -57,20 +58,7 @@ class _CustomerTrackingState extends State<CustomerTracking> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    buildCountButton('-', () {
-                      decreaseCustomerCount();
-                    }),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    buildCountButton('+', () {
-                      increaseCustomerCount();
-                    }),
-                  ],
-                ),
+                _buildCountButtons(),
                 SizedBox(
                   height: 15,
                 ),
@@ -131,6 +119,27 @@ class _CustomerTrackingState extends State<CustomerTracking> {
         });
   }
 
+  Row _buildCountButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CountButton(
+            label: '-',
+            onPressed: () {
+              decreaseCustomerCount();
+            }),
+        SizedBox(
+          width: 20,
+        ),
+        CountButton(
+            label: '+',
+            onPressed: () {
+              increaseCustomerCount();
+            }),
+      ],
+    );
+  }
+
   Future<int> createDialog(BuildContext context) {
     TextEditingController customController =
         TextEditingController(text: limit.toString());
@@ -164,40 +173,16 @@ class _CustomerTrackingState extends State<CustomerTracking> {
         });
   }
 
-  ButtonTheme buildCountButton(String text, VoidCallback onPressedAction) {
-    return ButtonTheme(
-      minWidth: 100,
-      height: 100,
-      child: FlatButton(
-        color: Colors.grey[200],
-        shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(10.0),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 50,
-          ),
-        ),
-        onPressed: onPressedAction,
-      ),
-    );
-  }
-
-  FlatButton buildQueueButton(int index, String text, int numberOfPeople) {
-    return FlatButton(
-      disabledColor: Colors.grey[200],
-      color: activeButton[index] ? Colors.red[300] : Colors.grey[300],
-      shape: new RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(30.0),
-      ),
-      child: Text(text),
-      onPressed: queueEnabled
-          ? () {
-              setQueue(numberOfPeople);
-              setActiveButton(index);
-            }
-          : null,
+  QueueButton buildQueueButton(int index, String text, int numberOfPeople) {
+    return QueueButton(
+      label: text,
+      active: activeButton[index],
+      onPressed: () {
+        if (queueEnabled) {
+          setQueue(numberOfPeople);
+          setActiveButton(index);
+        }
+      },
     );
   }
 
