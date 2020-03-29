@@ -10,13 +10,10 @@ class ShopLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
           child: Column(
             children: <Widget>[
-              Expanded(
-                child: Container(),
-              ),
               Center(
                 child: Text(
                   'Enter your code',
@@ -38,7 +35,6 @@ class ShopLoginScreen extends StatelessWidget {
                   animationDuration: Duration(milliseconds: 150),
                   borderRadius: BorderRadius.circular(6),
                   fieldHeight: 50,
-                  fieldWidth: 50,
                   textStyle: TextStyle(
                     fontSize: 32.0,
                     fontStyle: FontStyle.normal,
@@ -56,9 +52,6 @@ class ShopLoginScreen extends StatelessWidget {
                   },
                   onChanged: (value) {},
                 ),
-              ),
-              Expanded(
-                child: Container(),
               ),
             ],
           ),
