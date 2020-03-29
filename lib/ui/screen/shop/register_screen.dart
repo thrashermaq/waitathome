@@ -41,12 +41,12 @@ class RegisterFormState extends State<RegisterScreen> {
               nameColumn(),
               emailColumn(),
               positionColumn(context),
-              new CustomButton(
+              new CountButton(
                 label: "Speichern",
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     var shopService =
-                        Provider.of<ShopService>(context, listen: false);
+                    Provider.of<ShopService>(context, listen: false);
                     shopService
                         .register(nameController.text, emailController.text)
                         .then((shopCode) {

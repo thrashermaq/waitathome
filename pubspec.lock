@@ -450,13 +450,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
-  pin_code_fields:
+  pin_code_text_field:
     dependency: "direct main"
     description:
-      name: pin_code_fields
+      name: pin_code_text_field
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "1.5.1"
   plugin_platform_interface:
     dependency: transitive
     description:

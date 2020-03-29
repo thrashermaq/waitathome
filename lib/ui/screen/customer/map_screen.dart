@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:waitathome/core/model/marker_data.dart';
+import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/shop.dart';
+import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/info_widget.dart';
 
 const double CAMERA_ZOOM = 15;
@@ -26,13 +28,7 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _markers = new Set();
 
   double infoWidgetPosition = -100;
-
-  MarkerData selectedPin = MarkerData(
-      shopName: 'Coop Bern',
-      statusColor: Colors.orange,
-      peopleCount: 37,
-      queueCount: 0,
-      isFavourite: false);
+  Shop selectedShop;
 
   @override
   void initState() {
@@ -41,6 +37,83 @@ class _MapScreenState extends State<MapScreen> {
       _mapStyle = string;
     });
     loadCustomMarkers();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          _buildGoogleMap(),
+          InfoWidget(
+            position: infoWidgetPosition,
+            shop: selectedShop,
+          ),
+        ],
+      ),
+    );
+  }
+
+  GoogleMap _buildGoogleMap() {
+    return GoogleMap(
+      markers: _markers,
+      myLocationEnabled: true,
+      onMapCreated: _onMapCreated,
+      onTap: (LatLng location) {
+        setState(() {
+          // reset info widget and trigger animation
+          infoWidgetPosition = -100;
+        });
+      },
+      initialCameraPosition: CameraPosition(
+        target: _center,
+        zoom: CAMERA_ZOOM,
+      ),
+    );
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    mapController.setMapStyle(_mapStyle);
+    loadMarkers();
+  }
+
+  void loadMarkers() {
+    var shopService = Provider.of<ShopService>(context, listen: false);
+    shopService.loadAll((shops) => addMarkers(shops));
+  }
+
+  void addMarkers(List<Shop> shops) {
+    shops.forEach((shop) {
+      if (isValid(shop)) {
+        _markers.add(
+          Marker(
+            markerId: MarkerId(shop.id.toString()),
+            position: LatLng(
+                shop.location.latitude ?? 0, shop.location.longitude ?? 0),
+            icon: getMarker(shop),
+            onTap: () {
+              setState(() {
+                infoWidgetPosition = 0;
+                selectedShop = shop;
+              });
+            },
+          ),
+        );
+      }
+    });
+    // trigger rebuild
+    setState(() {});
+  }
+
+  getMarker(Shop shop) {
+    var customer = shop.customerInStore;
+    if (customer < 25) {
+      return greenMarker;
+    } else if (customer < 50) {
+      return orangeMarker;
+    }
+    return redMarker;
   }
 
   loadCustomMarkers() async {
@@ -53,61 +126,7 @@ class _MapScreenState extends State<MapScreen> {
         config, 'assets/images/marker_red.png');
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            markers: _markers,
-            myLocationEnabled: true,
-            onMapCreated: (GoogleMapController controller) {
-              mapController = controller;
-              mapController.setMapStyle(_mapStyle);
-              setState(() {
-                loadMarkers();
-              });
-            },
-            onTap: (LatLng location) {
-              // reset info widget
-              setState(() {
-                infoWidgetPosition = -100;
-              });
-            },
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: CAMERA_ZOOM,
-            ),
-          ),
-          InfoWidget(
-            position: infoWidgetPosition,
-            markerData: selectedPin,
-          ),
-        ],
-      ),
-    );
-  }
-
-  void loadMarkers() {
-    addMarker(MarkerId('1'), LatLng(46.94709, 7.44944), greenMarker);
-    addMarker(MarkerId('2'), LatLng(46.94850, 7.44784), greenMarker);
-    addMarker(MarkerId('3'), LatLng(46.94971, 7.44700), orangeMarker);
-    addMarker(MarkerId('4'), LatLng(46.94809, 7.44602), redMarker);
-  }
-
-  void addMarker(MarkerId id, LatLng latLng, BitmapDescriptor icon) {
-    _markers.add(
-      Marker(
-        markerId: id,
-        position: latLng,
-        icon: icon,
-        onTap: () {
-          setState(() {
-            // TODO: selectedPin = sourcePinInfo;
-            infoWidgetPosition = 0;
-          });
-        },
-      ),
-    );
+  bool isValid(Shop shop) {
+    return shop.location != null;
   }
 }

@@ -12,12 +12,13 @@ class ShopService {
     this.databaseReference = Firestore.instance;
   }
 
-  loadAll(void onLoaded(List<Shop> shops))  {
+  loadAll(void onLoaded(List<Shop> shops)) {
     databaseReference
         .collection(SHOPS_TABLE_NAME)
         .getDocuments()
         .then((QuerySnapshot snapshot) {
-      List<Shop> shops = snapshot.documents.map((f) => Shop.fromJson(f.data)).toList();
+      List<Shop> shops =
+          snapshot.documents.map((f) => Shop.fromJson(f.data)).toList();
       onLoaded(shops);
     });
   }
@@ -37,22 +38,33 @@ class ShopService {
     });
   }
 
-  void getShop(String id, void onShopUpdate(Shop event)) {
-    databaseReference
+  getShop(String id) {
+    return databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(id)
-        .snapshots()
-        .listen((DocumentSnapshot documentSnapshot) {
-      Map<String, dynamic> shopDto = documentSnapshot.data;
-      onShopUpdate(Shop.fromJson(shopDto));
-    }).onError((e) => print(e));
+        .snapshots();
   }
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {
+    print('Update store with id: $shopId with $nrOfConsumer consumers');
     databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
+  }
+
+  void setLimit(String shopId, int limit) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"limit": limit});
+  }
+
+  void setQueue(String shopId, int queue) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"queue": queue});
   }
 
   Future register(String shopName, String email) {
