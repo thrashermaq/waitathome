@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
@@ -11,6 +12,8 @@ const LatLng START_LOCATION = LatLng(46.94809, 7.44744);
 
 /// TODO: Package for search: https://pub.dev/packages/search_map_place
 class MapScreen extends StatefulWidget {
+  MapScreen({@required Key key});
+
   static const routeName = '/map';
 
   @override
@@ -41,14 +44,17 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Permission.location.request().then((onValue) => print(onValue));
     return Scaffold(
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(),
-          InfoWidget(
-            position: infoWidgetPosition,
-            shop: selectedShop,
-          ),
+          (selectedShop != null)
+              ? InfoWidget(
+                  position: infoWidgetPosition,
+                  shopId: selectedShop.id,
+                )
+              : Container(),
         ],
       ),
     );
@@ -58,6 +64,7 @@ class _MapScreenState extends State<MapScreen> {
     return GoogleMap(
       markers: _markers,
       myLocationEnabled: true,
+      myLocationButtonEnabled: false,
       onMapCreated: _onMapCreated,
       onTap: (LatLng location) {
         setState(() {
@@ -80,7 +87,14 @@ class _MapScreenState extends State<MapScreen> {
 
   void loadMarkers() {
     var shopService = Provider.of<ShopService>(context, listen: false);
-    shopService.loadAll((shops) => addMarkers(shops));
+    shopService.getShops().listen((snapshot) {
+      List<Shop> shops = snapshot.documents.map((document) {
+        var shop = Shop.fromJson(document.data);
+        shop.id = document.documentID;
+        return shop;
+      }).toList();
+      addMarkers(shops);
+    });
   }
 
   void addMarkers(List<Shop> shops) {
@@ -127,6 +141,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   bool isValid(Shop shop) {
-    return shop.location != null;
+    return shop != null && shop.location != null;
   }
 }
