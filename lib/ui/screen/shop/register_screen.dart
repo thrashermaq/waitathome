@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/components/custom_button.dart';
+import 'package:waitathome/ui/components/count_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/shop/register';
@@ -51,13 +51,15 @@ class RegisterFormState extends State<RegisterScreen> {
                 ),
               ),
             ),
-            new CustomButton(
+            new CountButton(
               label: "Speichern",
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   var shopService =
                       Provider.of<ShopService>(context, listen: false);
-                  shopService.register(nameController.text, emailController.text).then((shopId) {
+                  shopService
+                      .register(nameController.text, emailController.text)
+                      .then((shopId) {
                     print("shop saved with id $shopId");
                   });
                 }

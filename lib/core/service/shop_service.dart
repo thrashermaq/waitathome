@@ -38,22 +38,33 @@ class ShopService {
     });
   }
 
-  void getShop(String id, void onShopUpdate(Shop event)) {
-    databaseReference
+  getShop(String id) {
+    return databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(id)
-        .snapshots()
-        .listen((DocumentSnapshot documentSnapshot) {
-      Map<String, dynamic> shopDto = documentSnapshot.data;
-      onShopUpdate(Shop.fromJson(shopDto));
-    }).onError((e) => print(e));
+        .snapshots();
   }
 
   void setConsumerInStore(String shopId, int nrOfConsumer) {
+    print('Update store with id: $shopId with $nrOfConsumer consumers');
     databaseReference
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
         .updateData({"customerInStore": nrOfConsumer});
+  }
+
+  void setLimit(String shopId, int limit) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"limit": limit});
+  }
+
+  void setQueue(String shopId, int queue) {
+    databaseReference
+        .collection(SHOPS_TABLE_NAME)
+        .document(shopId)
+        .updateData({"queue": queue});
   }
 
   Future register(String shopName, String email) {
