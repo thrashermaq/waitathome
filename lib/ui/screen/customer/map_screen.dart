@@ -84,7 +84,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Shop> shops) {
-    print(shops);
     shops.forEach((shop) => _markers.add(
           Marker(
             markerId: MarkerId(shop.id.toString()),
@@ -99,6 +98,8 @@ class _MapScreenState extends State<MapScreen> {
             },
           ),
         ));
+
+    // trigger rebuild
     setState(() {});
   }
 
