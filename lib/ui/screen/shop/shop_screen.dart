@@ -26,6 +26,7 @@ class _ShopScreenState extends State<ShopScreen> {
     shopService = Provider.of<ShopService>(context, listen: false);
 
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
       body: SafeArea(
         child: _buildCustomerTracker(shopId),
       ),
@@ -45,60 +46,70 @@ class _ShopScreenState extends State<ShopScreen> {
           shop = Shop.fromJson(snapshot.data.data);
           shop.id = snapshot.data.documentID;
           bool storeIsFull = shop.customerInStore >= shop.limit;
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '${shop.name}',
-                  style: TextStyle(
-                    fontSize: 44,
-                  ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Spacer(),
+              Text(
+                '${shop.name}',
+                style: TextStyle(
+                  fontSize: 44,
                 ),
-                Text(
+              ),
+              Text(
+                'Anzahl Kunden im Laden',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[600],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
                   '${shop.customerInStore}',
                   style: TextStyle(
-                    fontSize: 200,
+                    fontSize: 150,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                _buildCountButtons(shop),
-                SizedBox(
-                  height: 15,
+              ),
+              _buildCountButtons(shop),
+              Spacer(),
+              Text(
+                'Warteschlange',
+                style: TextStyle(
+                  fontSize: 25,
                 ),
-                Text(
-                  'Warteschlange',
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    buildQueueButton(QueueTypes.SMALL, storeIsFull),
+                    buildQueueButton(QueueTypes.MEDIUM, storeIsFull),
+                    buildQueueButton(QueueTypes.BIG, storeIsFull),
+                  ],
+                ),
+              ),
+              Spacer(),
+              InkWell(
+                child: Text(
+                  'Ladenkapazität anpassen',
                   style: TextStyle(
-                    fontSize: 25,
+                    color: Colors.blue,
+                    fontSize: 16,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      buildQueueButton(QueueTypes.SMALL, storeIsFull),
-                      buildQueueButton(QueueTypes.MEDIUM, storeIsFull),
-                      buildQueueButton(QueueTypes.BIG, storeIsFull),
-                    ],
-                  ),
-                ),
-                InkWell(
-                    child: Text(
-                      'Ladenkapazität anpassen',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
-                    ),
-                    onTap: () {
-                      _showCapacityDialog(context);
-                    }),
-              ],
-            ),
+                onTap: () {
+                  _showCapacityDialog(context);
+                },
+              ),
+              Spacer(),
+            ],
           );
         });
   }
@@ -121,7 +132,7 @@ class _ShopScreenState extends State<ShopScreen> {
           },
         ),
         SizedBox(
-          width: 20,
+          width: 30,
         ),
         CountButton(
             label: '+',
