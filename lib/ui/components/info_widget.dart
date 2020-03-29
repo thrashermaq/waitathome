@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/queue_types.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 
@@ -93,7 +94,7 @@ class _InfoWidgetState extends State<InfoWidget> {
                 ),
               ),
               Text(
-                'Schlange: ${shop.queue}',
+                _getQueueText(shop.queue),
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -145,5 +146,12 @@ class _InfoWidgetState extends State<InfoWidget> {
       return Colors.orange;
     }
     return Colors.red;
+  }
+
+  String _getQueueText(int queue) {
+    if (queue == null) {
+      return 'Aktuell keine Personen am anstehen';
+    }
+    return QueueTypes.getType(queue).description;
   }
 }
