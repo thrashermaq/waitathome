@@ -8,4 +8,4 @@ App created in the CodeVsCovid19 hackaton in Switzerland. With the hacking boys 
 ## Things to know
 
 ### Build json converters
-- Always run `flutter pub run build_runner build` when a model changed!!
+- Always run `flutter pub run build_runner build --delete-conflicting-outputs` when a model changed!!
