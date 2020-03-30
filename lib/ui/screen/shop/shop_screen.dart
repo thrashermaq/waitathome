@@ -74,7 +74,7 @@ class _ShopScreenState extends State<ShopScreen> {
     return Column(
       children: <Widget>[
         Text(
-          'Warteschlange',
+          'Queuesize',
           style: TextStyle(
             fontSize: 25,
           ),
