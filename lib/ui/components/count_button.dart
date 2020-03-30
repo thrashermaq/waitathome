@@ -13,7 +13,8 @@ class CountButton extends StatelessWidget {
       minWidth: 100,
       height: 100,
       child: FlatButton(
-        color: Colors.grey[200],
+        disabledColor: Colors.grey[200],
+        color: Colors.orange,
         shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(10.0),
         ),
@@ -21,6 +22,7 @@ class CountButton extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 50,
+            color: Colors.white,
           ),
         ),
         onPressed: disabled ? null : onPressed,

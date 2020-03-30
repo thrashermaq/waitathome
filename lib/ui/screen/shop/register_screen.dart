@@ -8,7 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop_identifier.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/components/save_button.dart';
+import 'package:waitathome/ui/components/custom_button.dart';
 import 'package:waitathome/ui/screen/shop/register_success_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class RegisterFormState extends State<RegisterScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   int shopLimit = 50;
-  String selectedAddress = "Please choose the address of your store";
+  String selectedAddress = 'Please choose the address of your store';
   GeoPoint selectedGeoPoint = null;
 
   RegisterFormState() {
@@ -41,12 +41,12 @@ class RegisterFormState extends State<RegisterScreen> {
           setState(() {
             selectedGeoPoint = new GeoPoint(pos.latitude, pos.longitude);
             selectedAddress =
-                "${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}";
+                '${placemark[0].thoroughfare} ${placemark[0].subThoroughfare.toString()}, ${placemark[0].postalCode} ${placemark[0].locality}';
           });
         }
       });
 
-      print("position loaded $pos");
+      print('position loaded $pos');
     });
   }
 
@@ -77,30 +77,37 @@ class RegisterFormState extends State<RegisterScreen> {
                       padding: const EdgeInsets.only(top: 12.0),
                       child: _buildPositionColumn(context),
                     ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    new CustomButton(
+                      label: 'Create',
+                      disabled: false,
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          var shopService =
+                              Provider.of<ShopService>(context, listen: false);
+                          shopService
+                              .register(
+                                  nameController.text,
+                                  emailController.text,
+                                  selectedGeoPoint,
+                                  shopLimit)
+                              .then((ShopIdentifier shopIdentifier) {
+                            print(
+                                'shop saved with loginCode ${shopIdentifier.loginCode}');
+                            Navigator.pushNamed(
+                              context,
+                              RegisterSuccessScreen.routeName,
+                              arguments: shopIdentifier,
+                            );
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
-              new SaveButton(
-                label: "Create",
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    var shopService =
-                        Provider.of<ShopService>(context, listen: false);
-                    shopService
-                        .register(nameController.text, emailController.text,
-                            selectedGeoPoint, shopLimit)
-                        .then((ShopIdentifier shopIdentifier) {
-                      print(
-                          "shop saved with loginCode ${shopIdentifier.loginCode}");
-                      Navigator.pushNamed(
-                        context,
-                        RegisterSuccessScreen.routeName,
-                        arguments: shopIdentifier,
-                      );
-                    });
-                  }
-                },
-              )
             ]),
           ),
         ),
@@ -115,7 +122,7 @@ class RegisterFormState extends State<RegisterScreen> {
           return new NumberPickerDialog.integer(
               minValue: 1,
               maxValue: 1000,
-              title: new Text("Pick a new limit"),
+              title: new Text('Pick a new limit'),
               initialIntegerValue: shopLimit);
         }).then((int value) {
       if (value != null) {
@@ -133,7 +140,7 @@ class RegisterFormState extends State<RegisterScreen> {
       title: new TextFormField(
         controller: emailController,
         decoration: new InputDecoration(
-          hintText: "Email (optional)",
+          hintText: 'Email (optional)',
         ),
       ),
     );
@@ -148,7 +155,7 @@ class RegisterFormState extends State<RegisterScreen> {
       title: new TextFormField(
         controller: nameController,
         decoration: new InputDecoration(
-          hintText: "Name",
+          hintText: 'Name',
         ),
         validator: (value) {
           if (value.isEmpty) {
@@ -204,7 +211,7 @@ class RegisterFormState extends State<RegisterScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => PlacePicker(
-                  apiKey: "AIzaSyBug5lCh-t9AxVNFQM5wq-3bnq8SLRcWcA",
+                  apiKey: 'AIzaSyBug5lCh-t9AxVNFQM5wq-3bnq8SLRcWcA',
                   // Put YOUR OWN KEY here.
                   onPlacePicked: (result) {
                     var selectedLocation = result.geometry.location;

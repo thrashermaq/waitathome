@@ -4,8 +4,8 @@ import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/model/shop_identifier.dart';
 
 class ShopService {
-  static const SHOPS_TABLE_NAME = "shops";
-  static const SHOP_CODES_TABLE_NAME = "shop-codes";
+  static const SHOPS_TABLE_NAME = 'shops';
+  static const SHOP_CODES_TABLE_NAME = 'shop-codes';
 
   loadAll(void onLoaded(List<Shop> shops)) {
     Firestore.instance
@@ -35,7 +35,7 @@ class ShopService {
       if (value.data == null) {
         onLoginFailed();
       } else {
-        onLoginSuccessful(value.data["shop-id"]);
+        onLoginSuccessful(value.data['shop-id']);
       }
     });
   }
@@ -52,26 +52,26 @@ class ShopService {
     Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
-        .updateData({"customerInStore": nrOfConsumer});
+        .updateData({'customerInStore': nrOfConsumer});
   }
 
   void setLimit(String shopId, int limit) {
     Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
-        .updateData({"limit": limit});
+        .updateData({'limit': limit});
   }
 
   void setQueue(String shopId, int queue) {
     Firestore.instance
         .collection(SHOPS_TABLE_NAME)
         .document(shopId)
-        .updateData({"queue": queue});
+        .updateData({'queue': queue});
   }
 
   Future<ShopIdentifier> register(
       String shopName, String email, GeoPoint geoPoint, int shopLimit) {
-    print("register shop with name $shopName");
+    print('register shop with name $shopName');
     var shop = Shop.create(shopName, email, geoPoint, shopLimit);
 
     return saveShop(shop).then((shopId) {
@@ -91,16 +91,16 @@ class ShopService {
     var generatedCode = LoginCode.generate();
 
     var loginCodeEx = await existsLoginCode(generatedCode);
-    print("loginCodeexists $loginCodeEx");
+    print('loginCodeexists $loginCodeEx');
     if (loginCodeEx) {
-      print("generated login code already exists, try generate again");
+      print('generated login code already exists, try generate again');
       return addShopLoginCode(shopId);
     }
 
     return Firestore.instance
         .collection(SHOP_CODES_TABLE_NAME)
         .document(generatedCode.toString())
-        .setData({"shop-id": shopId}).then((ref) => generatedCode);
+        .setData({'shop-id': shopId}).then((ref) => generatedCode);
   }
 
   Future<bool> existsLoginCode(String loginCode) {
@@ -109,7 +109,7 @@ class ShopService {
         .document(loginCode.toString())
         .get()
         .then<bool>((value) {
-      print("value $value");
+      print('value $value');
       return value.data != null;
     });
   }

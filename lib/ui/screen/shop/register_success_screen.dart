@@ -27,7 +27,7 @@ class RegisterSuccessScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
-                  "Logincode",
+                  'Logincode',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -38,10 +38,10 @@ class RegisterSuccessScreen extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: Text(
-                    "Note the login code and share it with your coworkers only",
+                    'Note the login code and share it with your coworkers only',
                   )),
               SaveButton(
-                  label: "Start counting customers",
+                  label: 'Start counting customers',
                   onPressed: () => Navigator.pushNamed(
                         context,
                         ShopScreen.routeName,

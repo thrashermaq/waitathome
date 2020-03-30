@@ -97,10 +97,11 @@ class _ShopScreenState extends State<ShopScreen> {
         ),
         InkWell(
           child: Text(
-            'Ladenkapazität anpassen',
+            'Change shop capacity',
             style: TextStyle(
-              color: Colors.blue,
-              fontSize: 16,
+              fontSize: 18,
+              decoration: TextDecoration.underline,
+              color: Colors.deepOrangeAccent,
             ),
           ),
           onTap: () {
@@ -134,7 +135,7 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
         ),
         Text(
-          'Anzahl Kunden im Laden',
+          'Customers in shop',
           style: TextStyle(
             fontSize: 20,
             color: Colors.grey[600],

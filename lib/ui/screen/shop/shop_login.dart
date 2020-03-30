@@ -28,7 +28,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _pinError = false;
-  TextEditingController _controller = TextEditingController(text: "");
+  TextEditingController _controller = TextEditingController(text: '');
 
   @override
   void initState() {
@@ -93,12 +93,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   builder: (BuildContext context) {
                     // return object of type Dialog
                     return AlertDialog(
-                      title: new Text("Login failed"),
-                      content: new Text("Check if the entered pin is correct."),
+                      title: new Text('Login failed'),
+                      content: new Text('Check if the entered pin is correct.'),
                       actions: <Widget>[
                         // usually buttons at the bottom of the dialog
                         new FlatButton(
-                          child: new Text("OK"),
+                          child: new Text('OK'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         GestureDetector(
-          child: Text("Register new store",
+          child: Text('Register new store',
               style: TextStyle(
                 fontSize: 18,
                 decoration: TextDecoration.underline,
