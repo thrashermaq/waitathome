@@ -23,7 +23,7 @@ class Shop {
 
   factory Shop.create(
           String name, String email, GeoPoint geoPoint, int shopLimit) =>
-      new Shop(null, name, email, geoPoint, 0, shopLimit, 0);
+      new Shop(null, name, email, geoPoint, 0, shopLimit, null);
 
   factory Shop.fromJson(Map<String, dynamic> json) => _$ShopFromJson(json);
 
