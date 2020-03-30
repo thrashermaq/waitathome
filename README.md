@@ -17,7 +17,9 @@ WaitAtHome is a convenient solution for stores to track how many people are insi
 ### Customers
 For people who want to do grocery shopping it offers an easy way to check if it is worth going to the shops or to #stayathome.
 
-![](gifs/customer_low.gif)
+<p align="center">
+    <img src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/customer_low.gif?raw=true" title="customer journey">
+</p>
 
 ## How I built it
 We built the app with the cross-platform framework Flutter. Currently the app is working on Android an iOS but it cloud also be used for mobile or desktop apps. We used Firebase with Firestore to get real-time updates on the tracked customers in stores.
