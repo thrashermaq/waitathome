@@ -20,7 +20,7 @@ WaitAtHome is a convenient solution for stores to track how many people are insi
 For people who want to do grocery shopping it offers an easy way to check if it is worth going to the shops or to #stayathome.
 
 <p align="center">
-    <img width="400px" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/customer_low.gif?raw=true" title="customer journey">
+    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/customer_low.gif?raw=true" title="customer journey">
 </p>
 
 ## How I built it
