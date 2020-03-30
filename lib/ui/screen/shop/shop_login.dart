@@ -50,15 +50,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+        Image(
+          image: AssetImage('assets/images/vault_bank_safe.png'),
+          height: 300,
+          width: 300,
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 48.0, bottom: 48.0),
           child: PinCodeTextField(
+            pinBoxRadius: 5,
             autofocus: true,
             controller: _controller,
             highlight: true,
-            highlightColor: Colors.blue,
+            highlightColor: Colors.orange[300],
             defaultBorderColor: Colors.black,
-            hasTextBorderColor: Colors.green,
+            hasTextBorderColor: Colors.orange,
             maxLength: 6,
             hasError: _pinError,
             onTextChanged: (text) {
@@ -67,7 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
               });
             },
             onDone: (text) {
-              Provider.of<ShopService>(context, listen: false).login(text, (shopId) {
+              Provider.of<ShopService>(context, listen: false).login(text,
+                  (shopId) {
                 setState(() {
                   _controller.text = '';
                 });
@@ -113,11 +120,19 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         GestureDetector(
-          child: Text("Register", style: TextStyle(decoration: TextDecoration.underline, color: Colors.blue)),
+          child: Text("Register new store",
+              style: TextStyle(
+                fontSize: 18,
+                decoration: TextDecoration.underline,
+                color: Colors.deepOrangeAccent,
+              )),
           onTap: () {
-            Navigator.pushNamed(context, RegisterScreen.routeName);
+            Navigator.pushNamed(
+              context,
+              RegisterScreen.routeName,
+            );
           },
-        )
+        ),
       ],
     );
   }
