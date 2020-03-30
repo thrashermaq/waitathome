@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// TODO: Remove. Just for showcase.
 class CountButton extends StatelessWidget {
-  CountButton({this.label, this.onPressed});
+  CountButton({this.label, this.disabled, this.onPressed});
 
   final String label;
+  final bool disabled;
   final Function() onPressed;
 
   @override
@@ -23,7 +23,7 @@ class CountButton extends StatelessWidget {
             fontSize: 50,
           ),
         ),
-        onPressed: onPressed,
+        onPressed: disabled ? null : onPressed,
       ),
     );
   }
