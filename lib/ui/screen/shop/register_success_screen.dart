@@ -38,10 +38,10 @@ class RegisterSuccessScreen extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(25.0),
                   child: Text(
-                    "Schreiben Sie sich den Login Code auf und legen Sie den Zettel an einem für alle Mitarbeiter erreichbaren Ort ab.",
+                    "Note the login code and share it with your coworkers only",
                   )),
               SaveButton(
-                  label: "Kunden zählen starten",
+                  label: "Start counting customers",
                   onPressed: () => Navigator.pushNamed(
                         context,
                         ShopScreen.routeName,

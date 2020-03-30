@@ -16,7 +16,7 @@ class SaveButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         onPressed: onPressed,
-        color: Colors.blueAccent,
+        color: Colors.orangeAccent,
       ),
     );
   }

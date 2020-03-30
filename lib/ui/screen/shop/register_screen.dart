@@ -27,7 +27,7 @@ class RegisterFormState extends State<RegisterScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   int shopLimit = 50;
-  String selectedAddress = "Bitte wählen Sie die Adresse des Geschäfts aus";
+  String selectedAddress = "Please choose the address of your store";
   GeoPoint selectedGeoPoint = null;
 
   RegisterFormState() {
@@ -63,18 +63,25 @@ class RegisterFormState extends State<RegisterScreen> {
                 height: 225,
                 width: 225,
               ),
-              _buildNameColumn(),
-              _buildEmailColumn(),
               Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: _buildLimitColumn(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: _buildPositionColumn(context),
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  children: <Widget>[
+                    _buildNameColumn(),
+                    _buildEmailColumn(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: _buildLimitColumn(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: _buildPositionColumn(context),
+                    ),
+                  ],
+                ),
               ),
               new SaveButton(
-                label: "Speichern",
+                label: "Create",
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     var shopService =
@@ -108,7 +115,7 @@ class RegisterFormState extends State<RegisterScreen> {
           return new NumberPickerDialog.integer(
               minValue: 1,
               maxValue: 1000,
-              title: new Text("Pick a new price"),
+              title: new Text("Pick a new limit"),
               initialIntegerValue: shopLimit);
         }).then((int value) {
       if (value != null) {
@@ -119,7 +126,10 @@ class RegisterFormState extends State<RegisterScreen> {
 
   ListTile _buildEmailColumn() {
     return new ListTile(
-      leading: const Icon(Icons.email), // shopping_cart
+      leading: const Icon(
+        Icons.email,
+        color: Colors.orange,
+      ), // shopping_cart
       title: new TextFormField(
         controller: emailController,
         decoration: new InputDecoration(
@@ -131,7 +141,10 @@ class RegisterFormState extends State<RegisterScreen> {
 
   ListTile _buildNameColumn() {
     return new ListTile(
-      leading: const Icon(Icons.account_circle), // shopping_cart
+      leading: const Icon(
+        Icons.account_circle,
+        color: Colors.orange,
+      ), // shopping_cart
       title: new TextFormField(
         controller: nameController,
         decoration: new InputDecoration(
@@ -139,7 +152,7 @@ class RegisterFormState extends State<RegisterScreen> {
         ),
         validator: (value) {
           if (value.isEmpty) {
-            return 'Bitte geben Sie einen Namen an';
+            return 'Please insert a name';
           }
           return null;
         },
@@ -149,7 +162,10 @@ class RegisterFormState extends State<RegisterScreen> {
 
   ListTile _buildLimitColumn() {
     return new ListTile(
-      leading: const Icon(Icons.people), // shopping_cart
+      leading: const Icon(
+        Icons.people,
+        color: Colors.orange,
+      ), // shopping_cart
       title: Row(
         children: <Widget>[
           Text('Max.  '),
@@ -161,7 +177,7 @@ class RegisterFormState extends State<RegisterScreen> {
             ),
             onTap: () => _showNumberPickerDialog(),
           ),
-          Text('  Kunden im Laden erlaubt')
+          Text('  customers allowed in store')
         ],
       ),
     );
@@ -169,14 +185,20 @@ class RegisterFormState extends State<RegisterScreen> {
 
   ListTile _buildPositionColumn(BuildContext context) {
     return new ListTile(
-      leading: const Icon(Icons.location_on), // shopping_cart
+      leading: const Icon(
+        Icons.location_on,
+        color: Colors.orange,
+      ), // shopping_cart
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Flexible(child: new Text(this.selectedAddress)),
           FloatingActionButton(
-            backgroundColor: Colors.black26,
-            child: const Icon(Icons.map),
+            backgroundColor: Colors.orange[100],
+            child: const Icon(
+              Icons.map,
+              color: Colors.deepOrangeAccent,
+            ),
             elevation: 0,
             onPressed: () => Navigator.push(
               context,
