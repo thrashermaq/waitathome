@@ -98,6 +98,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Shop> shops) {
+    _markers.clear();
     shops.forEach((shop) {
       if (isValid(shop)) {
         _markers.add(
