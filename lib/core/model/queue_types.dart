@@ -1,9 +1,9 @@
 class QueueTypes {
-  static const SMALL = const QueueTypes._(0, 'Kurz', 'Kurze Schlange');
-  static const MEDIUM = const QueueTypes._(1, 'Mittel', 'Mittlere Schlange');
-  static const BIG = const QueueTypes._(2, 'Lang', 'Lange Schlange');
+  static const SMALL = const QueueTypes._(0, 'Short', 'Short queue');
+  static const MEDIUM = const QueueTypes._(1, 'Middle', 'Middle queue');
+  static const BIG = const QueueTypes._(2, 'Long', 'Long queue');
   static const UNKNOWN =
-      const QueueTypes._(-1, 'Unbekannt', 'Warteschlange ist unbekannt');
+      const QueueTypes._(-1, 'Unknown', 'Queue size is unknown');
 
   final int value;
   final String buttonText;
