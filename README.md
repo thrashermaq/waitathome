@@ -13,11 +13,11 @@ Create a save environment for both customers and employees in stores by reducing
 WaitAtHome is a convenient solution for stores to track how many people are inside.
 
 <p align="center">
-    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/shop_creation.gif?raw=true" title="shop journey">
+    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/master/gifs/shop_counter.gif?raw=true" title="shop journey">
 </p>
 
 <p align="center">
-    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/shop_counter.gif?raw=true" title="shop journey">
+    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/master/gifs/shop_counter.gif?raw=true" title="shop journey">
 </p>
 
 ### Customers
