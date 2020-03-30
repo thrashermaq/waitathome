@@ -13,7 +13,11 @@ Create a save environment for both customers and employees in stores by reducing
 WaitAtHome is a convenient solution for stores to track how many people are inside.
 
 <p align="center">
-    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/Shop2.gif?raw=true" title="shop journey">
+    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/shop_creation.gif?raw=true" title="shop journey">
+</p>
+
+<p align="center">
+    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/shop_counter.gif?raw=true" title="shop journey">
 </p>
 
 ### Customers
@@ -23,10 +27,10 @@ For people who want to do grocery shopping it offers an easy way to check if it 
     <img width="350" src="https://github.com/thrashermaq/waitathome/blob/feature/typos/gifs/customer_low.gif?raw=true" title="customer journey">
 </p>
 
-## How I built it
-We built the app with the cross-platform framework Flutter. Currently the app is working on Android an iOS but it cloud also be used for mobile or desktop apps. We used Firebase with Firestore to get real-time updates on the tracked customers in stores.
+## How we built it
+We built the app with the cross-platform framework Flutter. Currently the app is working on Android and iOS but it cloud also be used for mobile or desktop apps. We used Firebase with Firestore to get real-time updates on the tracked customers in stores.
 
-## Challenges I ran into
+## Challenges we ran into
 Ideation:
 * It wasn't easy to find an idea. There are already a lot of great projects like neighbourhood help apps or voluntary work out there to fight COVID-19.
 * It was our first Hackaton so we had to find some tools which support our work together. Miro and Trello worked great!

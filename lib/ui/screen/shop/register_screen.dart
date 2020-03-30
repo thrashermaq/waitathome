@@ -26,7 +26,7 @@ class RegisterFormState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
-  int shopLimit = 50;
+  int shopLimit = 20;
   String selectedAddress = 'Please choose the address of your store';
   GeoPoint selectedGeoPoint = null;
 
