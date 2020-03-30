@@ -98,6 +98,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void addMarkers(List<Shop> shops) {
+    _markers.clear();
     shops.forEach((shop) {
       if (isValid(shop)) {
         _markers.add(
@@ -121,10 +122,11 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   getMarker(Shop shop) {
-    var customer = shop.customerInStore;
-    if (customer < 25) {
+    var limit = shop.limit;
+    var customerInStore = shop.customerInStore;
+    if (customerInStore < (limit / 2)) {
       return greenMarker;
-    } else if (customer < 50) {
+    } else if (customerInStore < limit) {
       return orangeMarker;
     }
     return redMarker;
