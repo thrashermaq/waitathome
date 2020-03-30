@@ -11,12 +11,17 @@ class QueueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      disabledColor: Colors.grey[200],
-      color: active ? Colors.red[300] : Colors.grey[300],
+      disabledColor: Colors.orange[100],
+      color: active ? Colors.deepOrangeAccent : Colors.orange,
       shape: new RoundedRectangleBorder(
         borderRadius: new BorderRadius.circular(30.0),
       ),
-      child: Text(label),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       onPressed: disabled ? null : onPressed,
     );
   }

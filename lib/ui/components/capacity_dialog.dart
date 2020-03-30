@@ -17,10 +17,10 @@ class _CapacityDialogState extends State<CapacityDialog> {
     TextEditingController customController =
         TextEditingController(text: widget.currentLimit.toString());
     return AlertDialog(
-      title: Text('Ladenkapazität'),
+      title: Text('Shop capacity'),
       content: TextField(
         decoration: InputDecoration(
-          labelText: 'Geschäftskapazität',
+          labelText: 'Limit',
         ),
         keyboardType: TextInputType.number,
         inputFormatters: [
@@ -30,12 +30,14 @@ class _CapacityDialogState extends State<CapacityDialog> {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text('Abbrechen'),
+          child: Text('Cancel'),
           onPressed: () => Navigator.pop(context),
           textColor: Colors.grey[600],
         ),
         FlatButton(
-          child: Text('Speichern'),
+          child: Text('Save'),
+          color: Colors.orange,
+          textColor: Colors.white,
           onPressed: () {
             var value = customController.text.toString();
             final newLimit =
