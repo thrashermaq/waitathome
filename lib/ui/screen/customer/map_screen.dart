@@ -8,7 +8,7 @@ import 'package:waitathome/core/service/shop_service.dart';
 import 'package:waitathome/ui/components/info_widget.dart';
 
 const double CAMERA_ZOOM = 15;
-const LatLng START_LOCATION = LatLng(46.94809, 7.44744);
+const LatLng START_LOCATION = LatLng(46.94367, 7.40598);
 
 /// TODO: Package for search: https://pub.dev/packages/search_map_place
 class MapScreen extends StatefulWidget {
