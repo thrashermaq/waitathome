@@ -15,4 +15,4 @@ Create a save environment for both customers and employees in stores by reducing
 ## Things to know
 
 ### Build json converters
-- Always run `flutter pub run build_runner build` when a model changed!!
+- Always run `flutter pub run build_runner build --delete-conflicting-outputs` when a model changed!!

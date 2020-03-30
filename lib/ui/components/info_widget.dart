@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waitathome/core/model/queue_types.dart';
 import 'package:waitathome/core/model/shop.dart';
 import 'package:waitathome/core/service/shop_service.dart';
 
@@ -149,18 +150,8 @@ class _InfoWidgetState extends State<InfoWidget> {
 
   String _getQueueText(int queue) {
     if (queue == null) {
-      return 'Aktuell keine Personen am anstehen';
+      return 'Niemand am anstehen';
     }
-
-    switch (queue) {
-      case 0:
-        return 'Kleine Schlange';
-      case 1:
-        return 'Mittlere Schlange';
-      case 2:
-        return 'Grosse Schlange';
-      default:
-        return 'Unbekannt';
-    }
+    return QueueTypes.getType(queue).description;
   }
 }
