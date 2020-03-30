@@ -8,7 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:waitathome/core/model/shop_identifier.dart';
 import 'package:waitathome/core/service/shop_service.dart';
-import 'package:waitathome/ui/components/save_button.dart';
+import 'package:waitathome/ui/components/custom_button.dart';
 import 'package:waitathome/ui/screen/shop/register_success_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -77,30 +77,37 @@ class RegisterFormState extends State<RegisterScreen> {
                       padding: const EdgeInsets.only(top: 12.0),
                       child: _buildPositionColumn(context),
                     ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    new CustomButton(
+                      label: 'Create',
+                      disabled: false,
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          var shopService =
+                              Provider.of<ShopService>(context, listen: false);
+                          shopService
+                              .register(
+                                  nameController.text,
+                                  emailController.text,
+                                  selectedGeoPoint,
+                                  shopLimit)
+                              .then((ShopIdentifier shopIdentifier) {
+                            print(
+                                'shop saved with loginCode ${shopIdentifier.loginCode}');
+                            Navigator.pushNamed(
+                              context,
+                              RegisterSuccessScreen.routeName,
+                              arguments: shopIdentifier,
+                            );
+                          });
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
-              new SaveButton(
-                label: 'Create',
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    var shopService =
-                        Provider.of<ShopService>(context, listen: false);
-                    shopService
-                        .register(nameController.text, emailController.text,
-                            selectedGeoPoint, shopLimit)
-                        .then((ShopIdentifier shopIdentifier) {
-                      print(
-                          'shop saved with loginCode ${shopIdentifier.loginCode}');
-                      Navigator.pushNamed(
-                        context,
-                        RegisterSuccessScreen.routeName,
-                        arguments: shopIdentifier,
-                      );
-                    });
-                  }
-                },
-              )
             ]),
           ),
         ),
