@@ -150,7 +150,7 @@ class _InfoWidgetState extends State<InfoWidget> {
 
   String _getQueueText(int queue) {
     if (queue == null) {
-      return 'Aktuell keine Personen am anstehen';
+      return 'Niemand am anstehen';
     }
     return QueueTypes.getType(queue).description;
   }
