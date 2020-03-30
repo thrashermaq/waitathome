@@ -62,9 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
             autofocus: true,
             controller: _controller,
             highlight: true,
-            highlightColor: Colors.blue,
+            highlightColor: Colors.orange[300],
             defaultBorderColor: Colors.black,
-            hasTextBorderColor: Colors.green[300],
+            hasTextBorderColor: Colors.orange,
             maxLength: 6,
             hasError: _pinError,
             onTextChanged: (text) {
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                 fontSize: 18,
                 decoration: TextDecoration.underline,
-                color: Colors.blue,
+                color: Colors.deepOrangeAccent,
               )),
           onTap: () {
             Navigator.pushNamed(
