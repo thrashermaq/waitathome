@@ -17,7 +17,7 @@ WaitAtHome is a convenient solution for stores to track how many people are insi
 </p>
 
 <p align="center">
-    <img width="350" src="https://github.com/thrashermaq/waitathome/blob/master/gifs/shop_counter.gif?raw=true" title="shop journey">
+    <img width="350" src="https://raw.githubusercontent.com/thrashermaq/waitathome/master/gifs/shop_counter.gif?raw=true" title="shop journey">
 </p>
 
 ### Customers
