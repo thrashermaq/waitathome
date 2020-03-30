@@ -1,6 +1,7 @@
 ## Inspiration
 The measures of the federal government states:
 > These establishments must follow the rules on hygiene and social distancing. This can mean, for example, that the number of people present must be limited so as to allow people to keep their distance."
+
 Link: https://www.bag.admin.ch/bag/en/home/krankheiten/ausbrueche-epidemien-pandemien/aktuelle-ausbrueche-epidemien/novel-cov/massnahmen-des-bundes.html
 
 Many shops use paper tickets to control the number of customers. The ticket is handed from person to person which isn't a safe way! As a customer, there is no way to know the current capacity of your shop. You leave your home to do your necessary purchases and risk to get in crowds of people waiting in front of the shop. We came up with a solution for this problem which is called WaitAtHome.
@@ -10,10 +11,12 @@ Create a save environment for both customers and employees in stores by reducing
 
 ### Shops
 WaitAtHome is a convenient solution for stores to track how many people are inside.
+
 // TODO: Add GIF of Shop Demo
 
 ### Customers
 For people who want to do grocery shopping it offers an easy way to check if it is worth going to the shops or to #stayathome.
+
 // TODO: Add GIF of Customer Demo
 
 ## How I built it
@@ -51,4 +54,5 @@ In development:
 ### Things to know
 - Always run `flutter pub run build_runner build --delete-conflicting-outputs` when a model changed!!
 
-App was created in the CodeVsCovid19 hackaton in Switzerland. The teams  hacking boys Nils, Hoang, Luca and Ralf.
+### The boys
+App was created by the hacking boys Nils, Hoang, Luca and Ralf
